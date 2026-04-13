@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新学修ポートフォリオ — 長崎大学</title>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --blue: #1a6fc4;
+  --blue-light: #e8f0fe;
+  --blue-mid: #4a90d9;
+  --blue-dark: #0d4f9c;
+  --teal: #1D9E75;
+  --teal-light: #e6f6f1;
+  --teal-dark: #0a6b4d;
+  --purple: #534AB7;
+  --purple-light: #f0effe;
+  --amber: #b06a00;
+  --amber-light: #fff4e0;
+  --coral: #c0431f;
+  --coral-light: #fdf0ec;
+  --gray: #4a4a4a;
+  --gray-light: #f4f4f2;
+  --text: #1a1a1a;
+  --text-secondary: #555;
+  --text-tertiary: #888;
+  --border: rgba(0,0,0,0.10);
+  --border-strong: rgba(0,0,0,0.18);
+  --bg: #f0f2f5;
+  --bg-card: #ffffff;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: 'BIZ UDPGothic', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: var(--blue-dark);
+  padding: 0 20px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 58px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.app-logo { display: flex; align-items: center; gap: 10px; }
+.app-logo-mark {
+  width: 34px; height: 34px; background: rgba(255,255,255,0.2);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+.app-logo-text { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+.app-logo-text span { color: #7ec8f7; }
+.app-user { font-size: 12px; color: rgba(255,255,255,0.8); text-align: right; }
+.app-user strong { display: block; font-size: 14px; color: #fff; font-weight: 700; }
+
+/* ===== TAB NAV ===== */
+.tab-nav {
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border);
+  display: flex; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  padding: 0 8px;
+  position: sticky; top: 58px; z-index: 99;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: none; padding: 14px 18px;
+  font-size: 13px; font-weight: 700; font-family: var(--font);
+  color: var(--text-secondary); background: none; border: none;
+  border-bottom: 3px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px; letter-spacing: 0.01em;
+}
+.tab-btn:hover { color: var(--blue); background: var(--blue-light); }
+.tab-btn.active { color: var(--blue-dark); border-bottom-color: var(--blue); }
+
+/* ===== MAIN ===== */
+.main { max-width: 920px; margin: 0 auto; padding: 24px 16px 80px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== SECTION HEADER ===== */
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.section-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: 0.01em; }
+.section-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.8; }
+
+/* ===== CARD ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.card-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.6; }
+
+/* ===== LABEL PILL ===== */
+.label-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700; padding: 4px 12px;
+  border-radius: 20px; margin-bottom: 12px; letter-spacing: 0.02em;
+}
+.q-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 6px; margin-bottom: 5px;
+  background: #f0f0ee; color: #555; border: 1px solid rgba(0,0,0,0.1);
+}
+.source-note {
+  font-size: 12px; color: var(--text-secondary);
+  background: #f8f9ff; border-left: 4px solid var(--blue);
+  padding: 10px 14px; border-radius: 0 8px 8px 0;
+  margin-bottom: 18px; line-height: 1.8; font-weight: 400;
+}
+.chart-wrap { position: relative; width: 100%; }
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+.add-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700; padding: 8px 16px;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-secondary);
+  cursor: pointer; font-family: var(--font); margin-top: 12px;
+}
+
+/* ===== BIG SECTION ACCORDION (能力で見る私) ===== */
+.big-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.big-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; cursor: pointer; user-select: none;
+  transition: background 0.15s;
+}
+.big-section-header:hover { background: #fafafa; }
+.big-section-left { display: flex; align-items: center; gap: 14px; }
+.big-section-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+.big-section-info {}
+.big-section-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.big-section-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.big-section-arrow { font-size: 13px; color: var(--text-tertiary); transition: transform 0.25s; flex-shrink: 0; }
+.big-section-arrow.open { transform: rotate(180deg); }
+.big-section-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--border); background: #fdfefe; }
+.big-section-body.open { display: block; }
+
+/* ===== BADGES ===== */
+.badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+}
+.badge-gold { background: var(--amber-light); color: #7a4800; border: 1px solid #f0b040; }
+.badge-green { background: var(--teal-light); color: var(--teal-dark); border: 1px solid #5DCAA5; }
+.badge-blue { background: var(--blue-light); color: var(--blue-dark); border: 1px solid #85B7EB; }
+.badge-gray { background: var(--gray-light); color: #666; border: 1px dashed #b0b0a8; }
+
+/* ===== SUMMARY CARDS ===== */
+.summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+.summary-card { background: var(--blue-dark); border-radius: var(--radius-sm); padding: 16px; color: #fff; }
+.summary-label { font-size: 11px; color: rgba(255,255,255,0.75); margin-bottom: 4px; font-weight: 700; letter-spacing: 0.04em; }
+.summary-value { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.1; }
+.summary-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.summary-note { font-size: 11px; color: #7ec8f7; margin-top: 4px; font-weight: 700; }
+
+/* ===== DP ITEMS ===== */
+.dp-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.dp-item:last-child { border-bottom: none; padding-bottom: 0; }
+.dp-num { width: 30px; height: 30px; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.dp-text { font-size: 13px; color: var(--text); line-height: 1.8; flex: 1; }
+
+/* ===== QUESTION CARD ===== */
+.question-card { background: linear-gradient(135deg, #2d2680 0%, #4a42c0 100%); border-radius: var(--radius); padding: 28px; text-align: center; margin-bottom: 8px; }
+.question-label { font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 10px; font-weight: 700; letter-spacing: 0.08em; }
+.question-text { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 18px; line-height: 1.7; }
+.answer-saved { font-size: 13px; color: var(--text); background: #fff; border-radius: 8px; padding: 14px 16px; text-align: left; line-height: 1.8; }
+.answer-note { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 10px; }
+
+/* ===== TIMELINE ===== */
+.timeline { display: flex; flex-direction: column; }
+.tl-row { display: grid; grid-template-columns: 68px 1fr; }
+.tl-marker { display: flex; flex-direction: column; align-items: center; }
+.tl-dot { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.tl-line { width: 2px; flex: 1; background: var(--border); margin: 4px 0; }
+.tl-row:last-child .tl-line { display: none; }
+.tl-content { padding: 0 0 18px 14px; }
+.tl-year { font-size: 11px; color: var(--text-tertiary); margin-bottom: 5px; font-weight: 700; }
+.tl-card { background: #f8f9fa; border-radius: 8px; padding: 11px 14px; font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 6px; border-left: 3px solid #ddd; }
+.tl-card.empty { color: var(--text-tertiary); font-style: italic; border-left-color: #eee; }
+.tl-sublabel { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; font-weight: 700; }
+
+/* ===== HEATMAP ===== */
+.hm-section-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; padding: 4px 10px; background: #f0f2f5; border-radius: 6px; display: inline-block; }
+.hm-wrap { overflow-x: auto; margin-bottom: 16px; }
+.hm-table { border-collapse: separate; border-spacing: 0; min-width: 480px; }
+.hm-table th { font-size: 9px; color: var(--text-tertiary); text-align: center; padding: 2px 1px 6px; font-weight: 700; }
+.hm-table th.item-col { text-align: left; min-width: 120px; font-size: 10px; }
+.hm-table td { padding: 2px 1px; }
+.hm-table td.item-col { font-size: 11px; color: var(--text); padding-right: 6px; white-space: nowrap; font-weight: 400; }
+.hm-cell { width: 28px; height: 22px; border-radius: 4px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; }
+
+/* ===== FACE MARKS ===== */
+.face-table { width: 100%; border-collapse: collapse; }
+.face-table th { font-size: 10px; color: var(--text-secondary); text-align: center; padding: 3px 3px 10px; font-weight: 700; vertical-align: bottom; }
+.face-table th.q-col { text-align: left; min-width: 160px; font-size: 11px; }
+.face-table td { padding: 8px 3px; border-top: 1px solid var(--border); vertical-align: middle; }
+.face-table td.q-col { padding-right: 8px; }
+.face-table td.face-col { text-align: center; }
+.face-legend { display: flex; gap: 12px; flex-wrap: wrap; background: #f8f9fa; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; align-items: center; border: 1px solid var(--border); }
+.face-legend-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; font-weight: 700; }
+.face-legend-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.face-legend-text { font-size: 8px; color: var(--text-secondary); text-align: center; line-height: 1.3; max-width: 54px; }
+
+/* ===== STAR ===== */
+.stars-wrap { display: flex; gap: 2px; }
+.star-on { font-size: 14px; }
+.star-off { font-size: 14px; color: #D3D1C7; }
+.compare-pill { font-size: 11px; padding: 2px 9px; border-radius: 8px; font-weight: 700; }
+.compare-high { background: var(--teal-light); color: var(--teal-dark); }
+.compare-same { background: var(--gray-light); color: #666; }
+.compare-low { background: var(--coral-light); color: var(--coral); }
+
+/* ===== CAT ACCORDION (成長の記録内) ===== */
+.cat-block { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+.cat-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; background: #f8f9fa; user-select: none; }
+.cat-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cat-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.score-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+.badge-up { background: var(--teal-light); color: var(--teal-dark); }
+.badge-same { background: var(--gray-light); color: #666; }
+.cat-arrow { font-size: 12px; color: var(--text-tertiary); transition: transform 0.2s; flex-shrink: 0; }
+.cat-arrow.open { transform: rotate(180deg); }
+.cat-body { display: none; background: var(--bg-card); }
+.cat-body.open { display: block; }
+.cat-chart-area { padding: 16px 16px 0; }
+.cat-chart-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
+.q-list { padding: 10px 16px 16px; }
+.q-row { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.q-row:last-child { border-bottom: none; padding-bottom: 0; }
+.q-full-text { font-size: 12px; color: var(--text); line-height: 1.7; margin-bottom: 6px; }
+.q-scale-note { font-size: 10px; color: var(--text-tertiary); margin-bottom: 6px; }
+.q-result-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 3px; }
+.q-result-label { font-size: 11px; color: var(--text-secondary); min-width: 60px; font-weight: 700; }
+.q-avg-text { font-size: 11px; color: var(--text-secondary); }
+
+/* ===== RUBRIC ===== */
+.rubric-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.rubric-label { font-size: 11px; color: var(--text-secondary); width: 80px; flex-shrink: 0; line-height: 1.3; font-weight: 700; }
+.rubric-track { flex: 1; height: 12px; background: #e8f0e8; border-radius: 6px; overflow: hidden; position: relative; }
+.rubric-val { font-size: 12px; color: var(--text-secondary); width: 24px; text-align: right; flex-shrink: 0; font-weight: 700; }
+
+/* ===== SM GRID ===== */
+.sm-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.sm-card { background: #f8f9fa; border-radius: 10px; padding: 12px; border: 1px solid var(--border); }
+.sm-qtag { font-size: 9px; color: var(--text-tertiary); margin-bottom: 3px; font-weight: 700; }
+.sm-title { font-size: 11px; color: var(--text); line-height: 1.5; margin-bottom: 8px; min-height: 32px; font-weight: 400; }
+.sm-chart-wrap { position: relative; height: 100px; }
+.sm-legend { display: flex; gap: 8px; margin-top: 5px; }
+.sm-leg { display: flex; align-items: center; gap: 3px; font-size: 9px; color: var(--text-tertiary); }
+.sm-leg-line { width: 12px; height: 2px; border-radius: 1px; }
+.sm-leg-dash { width: 12px; height: 0; border-top: 1.5px dashed; }
+
+/* ===== OVERSEAS ===== */
+.overseas-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.overseas-item { flex: 1; min-width: 120px; }
+.overseas-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; font-weight: 700; }
+.overseas-val { font-size: 14px; font-weight: 700; color: var(--text); }
+.rank-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+.rank-pill { font-size: 12px; padding: 3px 11px; border-radius: 10px; font-weight: 700; background: var(--teal-light); color: var(--teal-dark); }
+.rank-pill.avg { background: var(--gray-light); color: #666; border: 1px solid #c0c0b8; font-weight: 400; }
+
+/* ===== LEGEND ===== */
+.legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-secondary); }
+.leg-line { width: 18px; height: 2px; border-radius: 1px; }
+.leg-dash { width: 18px; height: 0; border-top: 2px dashed; }
+.leg-bar { width: 12px; height: 10px; border-radius: 2px; }
+
+/* ===== CERT ===== */
+.cert-add-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 6px; background: var(--teal); color: #fff; border: none; cursor: pointer; margin-bottom: 18px; font-family: var(--font); }
+.cert-group { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.cert-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.cert-group-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.cert-entry { display: flex; align-items: flex-start; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); gap: 8px; }
+.cert-entry:last-child { border-bottom: none; padding-bottom: 0; }
+.cert-entry-info { font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+.cert-entry-info strong { color: var(--text); font-weight: 700; }
+.cert-del-btn { width: 28px; height: 28px; border-radius: 5px; border: 1px solid #f0b0a0; background: #fff; color: var(--coral); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ===== FILES ===== */
+.upload-area { border: 2px dashed #c0a0e0; border-radius: var(--radius); padding: 24px; text-align: center; background: #f9f5ff; margin-bottom: 18px; cursor: pointer; }
+.upload-title { font-size: 14px; font-weight: 700; color: #5533aa; margin-bottom: 4px; margin-top: 6px; }
+.upload-sub { font-size: 12px; color: #7755bb; }
+.term-group { margin-bottom: 18px; }
+.term-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.term-badge { font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 10px; background: var(--coral-light); color: var(--coral); border: 1px solid #e0b0a0; }
+.term-count { font-size: 11px; color: var(--text-tertiary); font-weight: 700; }
+.file-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 7px; border: 1px solid var(--border); }
+.file-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; font-weight: 700; }
+.file-info { flex: 1; }
+.file-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.file-meta { font-size: 10px; color: var(--text-tertiary); }
+.file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.file-btn { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 5px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); cursor: pointer; }
+.file-btn.del { color: var(--coral); border-color: #f0b0a0; }
+
+/* ===== GPA TABLE ===== */
+.tab-switch { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab-sub-btn { font-size: 12px; font-weight: 700; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--border); background: #f8f9fa; color: var(--text-secondary); cursor: pointer; font-family: var(--font); }
+.tab-sub-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { background: var(--blue-dark); color: #fff; padding: 8px 10px; text-align: center; font-weight: 700; font-size: 11px; }
+.data-table td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--border); color: var(--text); }
+.data-table tr.current td { background: var(--blue-light); font-weight: 700; }
+.data-table td.leave { color: var(--text-tertiary); }
+.info-note { font-size: 12px; color: var(--text-secondary); margin-top: 12px; background: #fffbe6; padding: 10px 14px; border-radius: 8px; line-height: 1.7; border-left: 3px solid #f0c040; }
+
+/* ===== GOAL TABLE ===== */
+.goal-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.goal-table th { font-size: 11px; color: #fff; font-weight: 700; text-align: left; padding: 8px 10px; background: var(--blue-dark); }
+.goal-table th:first-child { width: 110px; }
+.goal-table td { font-size: 12px; color: var(--text); padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.7; }
+.goal-table td:first-child { color: var(--text-secondary); font-size: 11px; font-weight: 700; white-space: nowrap; background: #f8f9fa; }
+.mentor-comment { background: var(--purple-light); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #3a327a; line-height: 1.7; margin-top: 8px; border-left: 3px solid var(--purple); }
+.mentor-label { font-size: 10px; font-weight: 700; color: var(--purple); margin-bottom: 3px; letter-spacing: 0.04em; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .summary-grid { grid-template-columns: repeat(2,1fr); }
+  .summary-grid .summary-card:last-child { grid-column: span 2; }
+  .sm-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .tab-btn { padding: 12px 11px; font-size: 12px; }
+  .main { padding: 16px 12px 80px; }
+  .card { padding: 14px; }
+  .big-section-body { padding: 0 12px 14px; }
+  .section-title { font-size: 17px; }
+  .data-table { font-size: 11px; }
+  .data-table th, .data-table td { padding: 6px 6px; }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-logo">
+    <div class="app-logo-mark">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L17 6v5c0 4-3 7-7 7S3 15 3 11V6L10 2z" fill="rgba(255,255,255,0.9)"/>
+        <path d="M7 10.5l2.5 2.5L14 7" stroke="#1a6fc4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="app-logo-text">新学修<span>ポートフォリオ</span></div>
+  </div>
+  <div class="app-user">
+    <strong>テスト 環科太郎</strong>
+    環境科学部 4年生 ／ 2028年度 前期
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('dp',this)">🎓 ディプロマ・ポリシー</button>
+  <button class="tab-btn" onclick="switchTab('profile',this)">👤 自己紹介</button>
+  <button class="tab-btn" onclick="switchTab('numbers',this)">📊 数字で見る私</button>
+  <button class="tab-btn" onclick="switchTab('ability',this)">🌱 能力で見る私</button>
+  <button class="tab-btn" onclick="switchTab('future',this)">🔭 これからの私</button>
+  <button class="tab-btn" onclick="switchTab('portfolio',this)">📁 積み上げてきたもの</button>
+</nav>
+
+<main class="main">
+
+<!-- ===== TAB: DP ===== -->
+<div id="tab-dp" class="tab-panel active">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-light);">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 6v5c0 4-3 7-7 7S3 15 3 11V6L10 2z" stroke="#534AB7" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.5l2.5 2.5L14 7" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-title">ディプロマ・ポリシー</div>
+  </div>
+  <p class="section-sub">長崎大学があなたに卒業までに身につけてほしい能力・資質の指針です。入学時から卒業まで、常にこのDPを意識しながら学修を積み上げていきましょう。</p>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">🎓 長崎大学 全学ディプロマ・ポリシー</span>
+  <div class="card">
+    <div class="card-title">卒業認定・学位授与の方針（全学共通）</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">長崎大学は，４年間あるいは６年間の教育プログラムに定められた単位を修得し，以下の能力を身につけたと認められた者に対し，学位（学士）を授与します。</p>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">1</div><div class="dp-text">自ら学び，考え，主張し，行動することができる。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">2</div><div class="dp-text">分野・領域を超えて活用できる汎用可能な技能を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">3</div><div class="dp-text">専門職業人や研究者としての基盤的知識・技能を習得し，高い倫理観を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">4</div><div class="dp-text">地球環境と社会の多様性を理解している。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">5</div><div class="dp-text">主体性をもって他者と協働できる。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--purple-light);color:#3C3489;">6</div><div class="dp-text">地域社会および将来世代に貢献するグローバルな視点を身につけている。</div></div>
+  </div>
+
+  <span class="label-pill" style="background:var(--blue-light);color:var(--blue-dark);">🏛 環境科学部 ディプロマ・ポリシー</span>
+  <div class="card">
+    <div class="card-title">学位授与の方針（環境科学部）</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.8;">環境科学部では所定のカリキュラムによる教育プログラムに定められた単位を取得し，以下の能力を身につけたと認められた者に対し，学士（環境科学）の学位を授与します。</p>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP1</div><div class="dp-text">社会科学と自然科学に関する基礎的知識を修得している。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP2</div><div class="dp-text">自然環境メカニズムから社会システムにわたる多様な分野・領域において必要とされる汎用性の高い技能を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP3</div><div class="dp-text">環境問題を解決できる専門職業人としての基盤的知識・技能を修得している。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP4</div><div class="dp-text">地球環境と社会の多様性について理解している。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP5</div><div class="dp-text">環境問題の解決のために主体性をもって他者と協働できるコミュニケーション能力を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP6</div><div class="dp-text">地域社会及び将来世代の持続可能な発展に貢献できるグローバルな視点を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP7</div><div class="dp-text">持続可能な地域社会及び国際社会に貢献できる能力を身につけている。</div></div>
+    <div class="dp-item"><div class="dp-num" style="background:var(--blue-light);color:var(--blue-dark);font-size:10px;">DP8</div><div class="dp-text">各コースの学修到達目標を達成している。</div></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="question-card">
+    <div class="question-label">📝 入学時の記録 — 一度だけ回答できます</div>
+    <div class="question-text">あなたはなぜ<br>長崎大学に入学しましたか？</div>
+    <div class="answer-saved">環境問題に関心があり、地元長崎の自然環境を守る仕事に就きたいと思ったからです。特に有明海の環境保全に携わりたいという気持ちが強く、環境科学部を選びました。</div>
+    <div class="answer-note">2024年4月8日 入学時に記録しました</div>
+  </div>
+</div>
+
+<!-- ===== TAB: PROFILE ===== -->
+<div id="tab-profile" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f0f0f0;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke="#555" stroke-width="1.5"/><path d="M3 18c0-3.9 3.1-6 7-6s7 2.1 7 6" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="section-title">自己紹介</div>
+  </div>
+  <p class="section-sub">あなたの基本情報・学歴・職歴などを記録します。</p>
+  <div class="card">
+    <div class="card-title">基本情報</div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;width:150px;">学生番号</td><td style="padding:9px 0;">40126001</td></tr>
+      <tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;">氏名 ／ カナ</td><td style="padding:9px 0;">テスト 環科太郎 ／ テスト カンカタロウ</td></tr>
+      <tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;">所属（学部/学科）</td><td style="padding:9px 0;">環境科学部 ／ 4年生</td></tr>
+      <tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;">状況区分</td><td style="padding:9px 0;">在学中</td></tr>
+      <tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;">入学年月日</td><td style="padding:9px 0;">2024年4月1日</td></tr>
+      <tr><td style="padding:9px 0;color:var(--text-secondary);font-weight:700;">入学試験区分</td><td style="padding:9px 0;">推薦（公募）</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div class="card-title" style="margin:0;">学歴・職歴</div>
+      <button class="add-btn" style="margin:0;">＋ 登録</button>
+    </div>
+    <table style="width:100%;font-size:12px;border-collapse:collapse;">
+      <thead><tr style="background:#f0f2f5;"><th style="padding:7px 10px;text-align:left;border:1px solid var(--border);font-weight:700;">年</th><th style="padding:7px 10px;text-align:left;border:1px solid var(--border);font-weight:700;">月</th><th style="padding:7px 10px;text-align:left;border:1px solid var(--border);font-weight:700;">学校名等</th><th style="padding:7px 10px;text-align:left;border:1px solid var(--border);font-weight:700;">入学・卒業等</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:8px 10px;border:1px solid var(--border);">2013</td><td style="padding:8px 10px;border:1px solid var(--border);">4</td><td style="padding:8px 10px;border:1px solid var(--border);">長崎県立長崎南高等学校</td><td style="padding:8px 10px;border:1px solid var(--border);">入学</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid var(--border);">2016</td><td style="padding:8px 10px;border:1px solid var(--border);">3</td><td style="padding:8px 10px;border:1px solid var(--border);">長崎県立長崎南高等学校</td><td style="padding:8px 10px;border:1px solid var(--border);">卒業</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div class="card-title" style="margin:0;">補足事項</div>
+      <button class="add-btn" style="margin:0;">＋ 登録</button>
+    </div>
+    <p style="font-size:13px;color:var(--text-tertiary);">表示する項目がありません</p>
+  </div>
+</div>
+
+<!-- ===== TAB: NUMBERS ===== -->
+<div id="tab-numbers" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-light);">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 15L6 10 10 12.5 13.5 6 18 8.5" stroke="#185FA5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-title">数字で見る私</div>
+  </div>
+  <p class="section-sub">GPAと修得単位数の推移を確認できます。数字は自分の学修の積み重ねの記録です。</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">累積 GPA</div>
+      <div class="summary-value">2.66</div>
+      <div class="summary-sub">/ 4.0満点</div>
+      <div class="summary-note">▲ コース平均 2.42 を上回る</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">累積修得単位</div>
+      <div class="summary-value">124<span style="font-size:16px;font-weight:400;"> 単位</span></div>
+      <div class="summary-note">卒業要件 124単位 — 充足 ✓</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">コース内順位</div>
+      <div class="summary-value" style="font-size:22px;">上位 25%</div>
+      <div class="summary-sub">同学年・同コース比較</div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <div class="badge badge-gold">⭐ GPA 6期連続向上</div>
+    <div class="badge badge-green">✓ 卒業要件クリア</div>
+    <div class="badge badge-blue">🎯 100単位突破</div>
+    <div class="badge badge-gray">○ GPA 3.0達成（未）</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">GPAの推移</div>
+    <div class="card-sub">入学〜現在　点線 = 学年・コース別平均GPA</div>
+    <div class="chart-wrap" style="height:190px;">
+      <canvas id="gpaChart" role="img" aria-label="GPA推移グラフ">GPA推移</canvas>
+    </div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="leg-line" style="background:#185FA5;"></div>累積GPA（個人）</div>
+      <div class="legend-item"><div class="leg-dash" style="border-color:#85B7EB;"></div>学年・コース別平均GPA</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">累積修得単位数の推移</div>
+    <div class="card-sub">学期ごとの積み上がりを確認できます　赤点線 = 卒業要件（124単位）</div>
+    <div class="chart-wrap" style="height:170px;">
+      <canvas id="unitChart" role="img" aria-label="単位数推移グラフ">単位数推移</canvas>
+    </div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="leg-bar" style="background:#1D9E75;"></div>累積修得単位数</div>
+      <div class="legend-item"><div class="leg-dash" style="border-color:#E24B4A;"></div>卒業要件（124単位）</div>
+    </div>
+    <div class="info-note">💡 このペースで後期も9単位を修得すると、卒業時の累積GPAは<strong>2.67〜2.70</strong>が見込まれます。GPA 3.0到達には、残り学期で平均<strong>3.8以上</strong>が必要です。</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">学期別詳細</div>
+    <div class="tab-switch">
+      <button class="tab-sub-btn active" id="btn-gpa" onclick="switchSubTab('gpa')">GPA確認表</button>
+      <button class="tab-sub-btn" id="btn-unit" onclick="switchSubTab('unit')">単位数確認表</button>
+    </div>
+    <div id="table-gpa">
+      <table class="data-table">
+        <thead><tr><th>年度</th><th>認定学年</th><th>現況区分</th><th>学期</th><th>累積GPA（個人）</th><th>学年・コース別平均GPA</th></tr></thead>
+        <tbody>
+          <tr><td>2024</td><td>1</td><td>在学</td><td>前期</td><td>2.58</td><td>2.50</td></tr>
+          <tr><td>2024</td><td>1</td><td>在学</td><td>後期</td><td>2.59</td><td>2.48</td></tr>
+          <tr><td>2025</td><td>2</td><td>在学</td><td>前期</td><td>2.60</td><td>2.47</td></tr>
+          <tr><td>2025</td><td>2</td><td>在学</td><td>後期</td><td>2.61</td><td>2.46</td></tr>
+          <tr><td>2026</td><td>3</td><td>在学</td><td>前期</td><td>2.62</td><td>2.45</td></tr>
+          <tr><td>2026</td><td>3</td><td class="leave">休学</td><td>後期</td><td>2.62</td><td>2.48</td></tr>
+          <tr><td>2027</td><td>3</td><td>在学</td><td>前期</td><td>2.64</td><td>2.44</td></tr>
+          <tr><td>2027</td><td>4</td><td>在学</td><td>後期</td><td>2.65</td><td>2.43</td></tr>
+          <tr class="current"><td>2028</td><td>4</td><td>在学</td><td>前期</td><td>2.66</td><td>2.42</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="table-unit" style="display:none;">
+      <table class="data-table">
+        <thead><tr><th>年度</th><th>認定学年</th><th>現況区分</th><th>学期</th><th>修得単位数</th><th>累積単位数</th></tr></thead>
+        <tbody>
+          <tr><td>2024</td><td>1</td><td>在学</td><td>前期</td><td>18</td><td>18</td></tr>
+          <tr><td>2024</td><td>1</td><td>在学</td><td>後期</td><td>18</td><td>36</td></tr>
+          <tr><td>2025</td><td>2</td><td>在学</td><td>前期</td><td>18</td><td>54</td></tr>
+          <tr><td>2025</td><td>2</td><td>在学</td><td>後期</td><td>18</td><td>72</td></tr>
+          <tr><td>2026</td><td>3</td><td>在学</td><td>前期</td><td>17</td><td>89</td></tr>
+          <tr><td>2026</td><td>3</td><td class="leave">休学</td><td>後期</td><td>0</td><td>89</td></tr>
+          <tr><td>2027</td><td>3</td><td>在学</td><td>前期</td><td>17</td><td>106</td></tr>
+          <tr><td>2027</td><td>4</td><td>在学</td><td>後期</td><td>9</td><td>115</td></tr>
+          <tr class="current"><td>2028</td><td>4</td><td>在学</td><td>前期</td><td>9</td><td>124</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: ABILITY ===== -->
+<div id="tab-ability" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--teal-light);">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 6v5c0 4-3 7-7 7S3 15 3 11V6L10 2z" stroke="#1D9E75" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-title">能力で見る私</div>
+  </div>
+  <p class="section-sub">自己評価ルーブリック・学修状況報告・受講ふり返りの結果から、あなたの能力の成長を確認できます。各セクションをクリックして展開してください。</p>
+
+  <!-- BIG SECTION 1: 入学時のあなた -->
+  <div class="big-section" id="bs-1">
+    <div class="big-section-header" onclick="toggleBigSection('bs-1')">
+      <div class="big-section-left">
+        <div class="big-section-icon" style="background:#e6f6f1;">📸</div>
+        <div class="big-section-info">
+          <div class="big-section-title">入学時のあなた</div>
+          <div class="big-section-desc">入学直後（2024年4月）に回答した新入生調査の結果 ／ 1回限りの記録</div>
+        </div>
+      </div>
+      <span class="big-section-arrow open" id="bs-1-arrow">▼</span>
+    </div>
+    <div class="big-section-body open" id="bs-1-body">
+      <div style="height:16px;"></div>
+      <div class="source-note">出典：<strong>学修状況報告（新入生）</strong> ／ 2024年4月実施・1回限りの記録</div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（新入生）Q5A〜H</div>
+        <div class="card-title">高校3年生のとき、次のことをどの程度しましたか</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★1＝ひんぱんにした　★2＝ときどきした　★3＝あまりしなかった　★4＝まったくしなかった</div>
+        <div id="q5-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（新入生）Q6・SQ6</div>
+        <div class="card-title">入学前の渡航経験</div>
+        <div class="overseas-row">
+          <div class="overseas-item">
+            <div class="overseas-label">あなたの渡航経験</div>
+            <div class="overseas-val">10日以上1ヶ月未満</div>
+            <div style="font-size:11px;color:var(--text-tertiary);margin-top:3px;">学部で渡航経験あり：47.3%</div>
+          </div>
+          <div class="overseas-item">
+            <div class="overseas-label">あなたの渡航目的</div>
+            <div class="rank-list"><span class="rank-pill">旅行</span><span class="rank-pill">語学研修</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <div class="overseas-label" style="margin-bottom:5px;">学部での渡航目的（上位3位）</div>
+          <div class="rank-list"><span class="rank-pill avg">1位 旅行</span><span class="rank-pill avg">2位 留学</span><span class="rank-pill avg">3位 居住</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（新入生）Q8A〜P</div>
+        <div class="card-title">普段、次の項目をどの程度行いますか（入学時）</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div>
+        <div id="q8-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（新入生）Q9A〜H</div>
+        <div class="card-title">入学時の気持ち</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:10px;">回答尺度：あてはまる → あてはまらない（4段階）</div>
+        <div class="face-legend" id="face-legend-snap"></div>
+        <table class="face-table" id="q9-snap-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIG SECTION 2: 学生生活の状況 -->
+  <div class="big-section" id="bs-2">
+    <div class="big-section-header" onclick="toggleBigSection('bs-2')">
+      <div class="big-section-left">
+        <div class="big-section-icon" style="background:#e8f0fe;">📈</div>
+        <div class="big-section-info">
+          <div class="big-section-title">学生生活の状況</div>
+          <div class="big-section-desc">学修状況報告（学部生）Q1・Q7・Q10・Q11・Q17 ／ 毎年度末の記録</div>
+        </div>
+      </div>
+      <span class="big-section-arrow" id="bs-2-arrow">▼</span>
+    </div>
+    <div class="big-section-body" id="bs-2-body">
+      <div style="height:16px;"></div>
+      <div class="source-note" style="border-left-color:var(--blue);">出典：<strong>学修状況報告（学部生）</strong> ／ 毎年度末（3月）実施</div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（学部生）Q1・Q10A〜G・Q11</div>
+        <div class="card-title">学生生活・大学・学習への評価の推移</div>
+        <div class="card-sub">4点満点・高いほどポジティブ　1年次からの推移を設問ごとに表示</div>
+        <div class="sm-grid" id="sm-container"></div>
+      </div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（学部生）Q7・SQ7</div>
+        <div class="card-title">今年度の渡航経験</div>
+        <div class="overseas-row">
+          <div class="overseas-item">
+            <div class="overseas-label">あなたの渡航経験（最新年度）</div>
+            <div class="overseas-val">10日以上1ヶ月未満</div>
+            <div style="font-size:11px;color:var(--text-tertiary);margin-top:3px;">学部で渡航経験あり：38.2%</div>
+          </div>
+          <div class="overseas-item">
+            <div class="overseas-label">渡航の主な目的</div>
+            <div class="rank-list"><span class="rank-pill">留学</span><span class="rank-pill">語学研修</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <div class="overseas-label" style="margin-bottom:5px;">学部での渡航目的（上位3位）</div>
+          <div class="rank-list"><span class="rank-pill avg">1位 旅行</span><span class="rank-pill avg">2位 留学</span><span class="rank-pill avg">3位 インターンシップ</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="q-tag">学修状況報告（学部生）Q17A〜I</div>
+        <div class="card-title">今の気持ち（年度別）</div>
+        <div class="card-sub">年度ごとの回答を顔マークで表示しています</div>
+        <div class="face-legend" id="face-legend-q17"></div>
+        <table class="face-table" id="q17-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIG SECTION 3: 成長の記録 -->
+  <div class="big-section" id="bs-3">
+    <div class="big-section-header" onclick="toggleBigSection('bs-3')">
+      <div class="big-section-left">
+        <div class="big-section-icon" style="background:var(--teal-light);">🌱</div>
+        <div class="big-section-info">
+          <div class="big-section-title">成長の記録（DP軸）</div>
+          <div class="big-section-desc">学修状況報告（学部生）Q9A〜P ／ DPカテゴリ別・年次推移</div>
+        </div>
+      </div>
+      <span class="big-section-arrow" id="bs-3-arrow">▼</span>
+    </div>
+    <div class="big-section-body" id="bs-3-body">
+      <div style="height:16px;"></div>
+      <div class="source-note">出典：<strong>学修状況報告（学部生）</strong> Q9「あなたは普段、次の項目をどの程度行いますか」 ／ 毎年度末（3月）実施<br>回答尺度：1＝いつも　2＝かなり　3＝少し　4＝めったに/全くしない（スコアは高いほど実施頻度が高い）</div>
+      <div id="growth-cats"></div>
+    </div>
+  </div>
+
+  <!-- BIG SECTION 4: 受講ふり返り -->
+  <div class="big-section" id="bs-4">
+    <div class="big-section-header" onclick="toggleBigSection('bs-4')">
+      <div class="big-section-left">
+        <div class="big-section-icon" style="background:#e0f7f0;">🎓</div>
+        <div class="big-section-info">
+          <div class="big-section-title">受講ふり返り（授業アンケート）</div>
+          <div class="big-section-desc">「身についた能力」の選択率を学期別ヒートマップで表示</div>
+        </div>
+      </div>
+      <span class="big-section-arrow" id="bs-4-arrow">▼</span>
+    </div>
+    <div class="big-section-body" id="bs-4-body">
+      <div style="height:16px;"></div>
+      <div class="source-note">出典：<strong>受講ふり返り（授業アンケート）</strong> ／「この授業を通して身についた能力」（複数選択）<br>選択率＝選択した授業数 ÷ 履修科目数　数値は1%単位で四捨五入</div>
+      <div class="card">
+        <div class="card-title">身についた能力の選択率（学期別ヒートマップ）</div>
+        <div class="card-sub">横に見ると継続して伸びている能力が、縦に見るとその学期に身についた能力がわかります</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;color:var(--text-secondary);align-items:center;">
+          <span style="font-weight:700;">選択率：</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:16px;height:14px;border-radius:3px;background:#E8F8F2;display:inline-block;border:1px solid #ccc;"></span>低</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:16px;height:14px;border-radius:3px;background:#9FE1CB;display:inline-block;"></span>30%</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:16px;height:14px;border-radius:3px;background:#1D9E75;display:inline-block;"></span>60%</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:16px;height:14px;border-radius:3px;background:#0F6E56;display:inline-block;"></span>高</span>
+        </div>
+        <div class="hm-section-label">あなた（環境科学部）</div>
+        <div class="hm-wrap"><table class="hm-table" id="hm-you"></table></div>
+        <div class="hm-section-label" style="margin-top:14px;">学部・学科 平均</div>
+        <div class="hm-wrap"><table class="hm-table" id="hm-avg"></table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIG SECTION 5: 自己評価ルーブリック -->
+  <div class="big-section" id="bs-5">
+    <div class="big-section-header" onclick="toggleBigSection('bs-5')">
+      <div class="big-section-left">
+        <div class="big-section-icon" style="background:#fff4e0;">📋</div>
+        <div class="big-section-info">
+          <div class="big-section-title">自己評価ルーブリック</div>
+          <div class="big-section-desc">身についた能力の学期ごとの推移（5点満点）</div>
+        </div>
+      </div>
+      <span class="big-section-arrow" id="bs-5-arrow">▼</span>
+    </div>
+    <div class="big-section-body" id="bs-5-body">
+      <div style="height:16px;"></div>
+      <div class="card">
+        <div class="card-title">身についた能力の推移（学期ごと）</div>
+        <div class="card-sub">5点満点 ／ 各学期末に自己評価を入力　赤線 = コース平均</div>
+        <div id="rubric-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: FUTURE ===== -->
+<div id="tab-future" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-light);">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v16M5 7l5-5 5 5" stroke="#534AB7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-title">これからの私</div>
+  </div>
+  <p class="section-sub">将来への記録と、学期ごとの目標・振り返りをまとめています。過去の自分の言葉を見ながら、これからの自分を考えましょう。</p>
+
+  <div class="source-note" style="border-left-color:var(--purple);">出典：<strong>学修状況報告（学部生）</strong> ／ 毎年度末（3月）実施　以下の記録はあなたが各年度末に回答した内容です</div>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">🔮 将来の職業希望の変遷（Q19）</span>
+  <div class="card">
+    <div class="q-tag">学修状況報告（学部生）Q19</div>
+    <div class="card-title">現時点での将来の職業について、希望をお聞かせください</div>
+    <div class="timeline" id="q19-tl"></div>
+  </div>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">🌅 将来の見通し（Q22）</span>
+  <div class="card">
+    <div class="q-tag">学修状況報告（学部生）Q22</div>
+    <div class="card-title">将来の見通しに関する、いまの状態にもっとも近い項目を選んでください</div>
+    <div class="timeline" id="q22-tl"></div>
+  </div>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">🎯 卒業後にしたいこと・就職活動（Q18・Q15）</span>
+  <div class="card">
+    <div class="q-tag">学修状況報告（学部生）Q18・Q15</div>
+    <div class="card-title">卒業後に備えてしたいこと ／ 就職活動の状況</div>
+    <div class="timeline" id="q18q15-tl"></div>
+  </div>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">⏱ 時間の使い方（Q6B〜H）</span>
+  <div class="card">
+    <div class="q-tag">学修状況報告（学部生）Q6B〜H</div>
+    <div class="card-title">1週間の時間の使い方（年度別記録）</div>
+    <div class="timeline" id="q6-tl"></div>
+  </div>
+
+  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">💼 インターンシップ（Q14・SQ14）</span>
+  <div class="card">
+    <div class="q-tag">学修状況報告（学部生）Q14・SQ14-1〜3B</div>
+    <div class="card-title">インターンシップへの参加記録</div>
+    <div class="timeline" id="q14-tl"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <span class="label-pill" style="background:var(--teal-light);color:var(--teal-dark);">✏️ 今学期の省察と次期の目標</span>
+  <div class="card">
+    <div class="card-title">大学で学ぶ上で、都度目標を設定して、その達成状況について自己評価を書いてください</div>
+    <div class="card-sub">メンター（指導教員）からの助言も合わせて確認できます</div>
+    <table class="goal-table" id="goal-table"></table>
+    <button class="add-btn">＋ 今学期の記録を追加</button>
+  </div>
+
+  <span class="label-pill" style="background:var(--teal-light);color:var(--teal-dark);">🌟 将来の夢・進路・就職</span>
+  <div class="card">
+    <div class="card-title">将来の夢や目標とする卒業後の自分の姿などについて具体的に書きましょう</div>
+    <div class="timeline" id="dream-tl"></div>
+    <button class="add-btn">＋ 記録を追加</button>
+  </div>
+
+  <span class="label-pill" style="background:var(--teal-light);color:var(--teal-dark);">📝 その他（学生生活・サークル活動など）</span>
+  <div class="card">
+    <div class="card-title">どんなことでも気が付いたことがあれば記録に残しておきましょう</div>
+    <div class="timeline" id="other-tl"></div>
+    <button class="add-btn">＋ 記録を追加</button>
+  </div>
+</div>
+
+<!-- ===== TAB: PORTFOLIO ===== -->
+<div id="tab-portfolio" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--amber-light);">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="3" stroke="#b06a00" stroke-width="1.6"/><path d="M5 10h10M5 7h10M5 13h6" stroke="#b06a00" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </div>
+    <div class="section-title">積み上げてきたもの</div>
+  </div>
+  <p class="section-sub">取得した資格や、授業で作り上げた成果物を記録・蓄積していきましょう。就職活動でも活用できます。</p>
+
+  <span class="label-pill" style="background:var(--amber-light);color:#7a4800;">🏆 資格情報</span>
+  <div class="card">
+    <div class="card-title">取得した資格・検定の記録</div>
+    <div class="card-sub">資格の種類・スコア・取得年月日を登録できます</div>
+    <button class="cert-add-btn">＋ 資格を追加</button>
+    <div class="cert-group">
+      <div class="cert-group-name">運転免許</div>
+      <div class="cert-entry">
+        <div class="cert-entry-info">取得年月日：<strong>2026-10-01</strong>　スコア・グレード：<strong>第二種普通自動車</strong>　備考：－</div>
+        <button class="cert-del-btn"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#c0431f" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+    <div class="cert-group">
+      <div class="cert-group-name">TOEIC Listening &amp; Reading Test</div>
+      <div class="cert-entry">
+        <div class="cert-entry-info">取得年月日：<strong>2026-04-01</strong>　スコア・グレード：<strong>550〜784点（B1）</strong>　備考：－</div>
+        <button class="cert-del-btn"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#c0431f" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+      <div class="cert-entry">
+        <div class="cert-entry-info">取得年月日：<strong>2026-12-01</strong>　スコア・グレード：<strong>785〜944点（B2）</strong>　備考：－</div>
+        <button class="cert-del-btn"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#c0431f" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+    <div class="cert-group">
+      <div class="cert-group-name">ITパスポート</div>
+      <div class="cert-entry">
+        <div class="cert-entry-info">取得年月日：<strong>2025-06-01</strong>　スコア・グレード：<strong>合格</strong>　備考：－</div>
+        <button class="cert-del-btn"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#c0431f" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <span class="label-pill" style="background:var(--coral-light);color:#8a3010;">📦 成果物ボックス</span>
+  <div class="card">
+    <div class="card-title">授業で作り上げた成果物の蓄積</div>
+    <div class="card-sub">レポート・演習課題・作品など、特に力を入れて作り上げたものをアップロードして保存できます</div>
+    <div class="upload-area">
+      <div style="font-size:28px;margin-bottom:6px;">📤</div>
+      <div class="upload-title">ファイルをアップロード</div>
+      <div class="upload-sub">PDF・Word・Excel・画像など対応　タップして選択またはドラッグ＆ドロップ</div>
+    </div>
+    <div class="term-group">
+      <div class="term-header"><div class="term-badge">1年次 前期</div><div class="term-count">2件</div></div>
+      <div class="file-row">
+        <div class="file-icon" style="background:#ffebee;color:#c62828;">PDF</div>
+        <div class="file-info"><div class="file-name">情報基礎・生成系AIに関する考察.pdf</div><div class="file-meta">情報基礎　2024年10月01日　1.2MB</div></div>
+        <div class="file-actions"><button class="file-btn">DL</button><button class="file-btn del">削除</button></div>
+      </div>
+      <div class="file-row">
+        <div class="file-icon" style="background:#e3f2fd;color:#1565c0;">DOC</div>
+        <div class="file-info"><div class="file-name">初年次セミナーでのレポート課題.docx</div><div class="file-meta">初年次セミナー　2024年11月15日　0.8MB</div></div>
+        <div class="file-actions"><button class="file-btn">DL</button><button class="file-btn del">削除</button></div>
+      </div>
+    </div>
+    <div class="term-group">
+      <div class="term-header"><div class="term-badge">3年次 後期</div><div class="term-count">2件</div></div>
+      <div class="file-row">
+        <div class="file-icon" style="background:#ffebee;color:#c62828;">PDF</div>
+        <div class="file-info"><div class="file-name">学外インターンシップに関する報告レポート.pdf</div><div class="file-meta">学外実習　2027年02月14日　2.1MB</div></div>
+        <div class="file-actions"><button class="file-btn">DL</button><button class="file-btn del">削除</button></div>
+      </div>
+      <div class="file-row">
+        <div class="file-icon" style="background:#e8f5e9;color:#1b5e20;">XLS</div>
+        <div class="file-info"><div class="file-name">インフラ関連施設での視察報告データ.xlsx</div><div class="file-meta">環境工学実習　2027年03月02日　1.5MB</div></div>
+        <div class="file-actions"><button class="file-btn">DL</button><button class="file-btn del">削除</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ===== TAB =====
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  initCharts(name);
+}
+function switchSubTab(name) {
+  document.getElementById('table-gpa').style.display=name==='gpa'?'block':'none';
+  document.getElementById('table-unit').style.display=name==='unit'?'block':'none';
+  document.getElementById('btn-gpa').className='tab-sub-btn'+(name==='gpa'?' active':'');
+  document.getElementById('btn-unit').className='tab-sub-btn'+(name==='unit'?' active':'');
+}
+
+// ===== BIG SECTION TOGGLE =====
+function toggleBigSection(id) {
+  const body=document.getElementById(id+'-body');
+  const arrow=document.getElementById(id+'-arrow');
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  arrow.classList.toggle('open',!isOpen);
+  if(!isOpen) initBigSection(id);
+}
+const bsInited={};
+function initBigSection(id) {
+  if(bsInited[id]) return;
+  bsInited[id]=true;
+  if(id==='bs-2') initBS2();
+  if(id==='bs-3') initBS3();
+  if(id==='bs-4') initBS4();
+  if(id==='bs-5') initBS5();
+}
+
+// ===== FACE =====
+function makeFace(level,size=24){
+  const c={
+    1:{bg:'#E1F5EE',st:'#0a6b4d',mouth:'M7 13 Q10 17 13 13'},
+    2:{bg:'#E6F1FB',st:'#185FA5',mouth:'M7 13.5 Q10 15.5 13 13.5'},
+    3:{bg:'#F4F4F2',st:'#4a4a4a',mouth:'M7.5 14 L12.5 14'},
+    4:{bg:'#FAECE7',st:'#993C1D',mouth:'M7 15.5 Q10 12 13 15.5'},
+  }[level];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="${c.bg}" stroke="${c.st}" stroke-width="1.3"/><circle cx="7.5" cy="8.5" r="1.1" fill="${c.st}"/><circle cx="12.5" cy="8.5" r="1.1" fill="${c.st}"/><path d="${c.mouth}" stroke="${c.st}" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>`;
+}
+function buildFaceLegend(id){
+  const el=document.getElementById(id);if(!el||el.children.length>0)return;
+  el.innerHTML='<span class="face-legend-label">回答の見方：</span>';
+  const labels={1:'あてはまる',2:'どちらかといえばあてはまる',3:'どちらかといえばあてはまらない',4:'あてはまらない'};
+  [1,2,3,4].forEach(lv=>{const i=document.createElement('div');i.className='face-legend-item';i.innerHTML=makeFace(lv,26)+`<div class="face-legend-text">${labels[lv]}</div>`;el.appendChild(i);});
+}
+
+// ===== STARS =====
+function makeStars(score,color){
+  let h='<div class="stars-wrap">';
+  for(let i=1;i<=4;i++) h+=`<span class="${i<=score?'star-on':'star-off'}" style="${i<=score?'color:'+color:''}"}>★</span>`;
+  return h+'</div>';
+}
+function compareLabel(score,avg){
+  const d=avg-score;
+  if(d>0.3)return'<span class="compare-pill compare-high">学部平均より高い</span>';
+  if(d<-0.3)return'<span class="compare-pill compare-low">学部平均より低い</span>';
+  return'<span class="compare-pill compare-same">学部平均と同程度</span>';
+}
+
+// ===== TIMELINE =====
+const tlColors=[{bg:'#e8f0fe',c:'#0d4f9c'},{bg:'#e6f6f1',c:'#0a6b4d'},{bg:'#f0effe',c:'#3C3489'},{bg:'#fff4e0',c:'#7a4800'}];
+function buildTimeline(id,items){
+  const el=document.getElementById(id);if(!el)return;
+  items.forEach((item,i)=>{
+    const s=tlColors[i%tlColors.length];
+    const row=document.createElement('div');row.className='tl-row';
+    const mk=document.createElement('div');mk.className='tl-marker';
+    mk.innerHTML=`<div class="tl-dot" style="background:${s.bg};color:${s.c};">${item.year}</div><div class="tl-line"></div>`;
+    const ct=document.createElement('div');ct.className='tl-content';
+    ct.innerHTML=`<div class="tl-year">${item.yearLabel||''}</div>`;
+    if(Array.isArray(item.entries)){
+      item.entries.forEach(e=>{
+        if(e.label)ct.innerHTML+=`<div class="tl-sublabel">${e.label}</div>`;
+        ct.innerHTML+=`<div class="tl-card${e.text?'':' empty'}" style="border-left-color:${s.c}33;">${e.text||'（未入力）'}</div>`;
+      });
+    } else {
+      ct.innerHTML+=`<div class="tl-card${item.text?'':' empty'}" style="border-left-color:${s.c}33;">${item.text||'（未入力）'}</div>`;
+    }
+    row.appendChild(mk);row.appendChild(ct);el.appendChild(row);
+  });
+}
+
+// ===== HEATMAP =====
+function rateToColor(r){
+  if(r===null)return null;
+  const t=Math.min(Math.max(r,0),1);
+  const stops=[[0,[232,248,242]],[0.2,[159,225,203]],[0.5,[29,158,117]],[0.8,[15,110,86]],[1,[4,52,44]]];
+  let lo=stops[0],hi=stops[stops.length-1];
+  for(let i=0;i<stops.length-1;i++)if(t>=stops[i][0]&&t<=stops[i+1][0]){lo=stops[i];hi=stops[i+1];break;}
+  const f=lo[0]===hi[0]?0:(t-lo[0])/(hi[0]-lo[0]);
+  const rgb=lo[1].map((c,i)=>Math.round(c+f*(hi[1][i]-c)));
+  return`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+}
+function buildHeatmap(tableId,data,futureFrom){
+  const table=document.getElementById(tableId);if(!table||table.children.length>0)return;
+  const items=['知識・技能の獲得','倫理観','主体的学習','論理的思考','計画性','意見・表現力','議論する力','協働性','困難を乗り越える力','自身の役割への責任','社会的問題への意識'];
+  const years=[{l:'2024',t:['前期','後期']},{l:'2025',t:['前期','後期']},{l:'2026',t:['前期','後期']},{l:'2027',t:['前期','後期']},{l:'2028',t:['前期']}];
+  const thead=document.createElement('thead');
+  const yr=document.createElement('tr');const yth0=document.createElement('th');yth0.className='item-col';yr.appendChild(yth0);
+  years.forEach((y,yi)=>{
+    if(yi>0){const g=document.createElement('th');g.style.width='4px';yr.appendChild(g);}
+    const yth=document.createElement('th');yth.colSpan=y.t.length;yth.style.cssText='font-size:9px;border-bottom:1px solid #ddd;padding-bottom:3px;font-weight:700;';yth.textContent=y.l;yr.appendChild(yth);
+  });
+  thead.appendChild(yr);
+  const tr2=document.createElement('tr');const tth0=document.createElement('th');tth0.className='item-col';tth0.textContent='身についた能力';tr2.appendChild(tth0);
+  years.forEach((y,yi)=>{
+    if(yi>0){const g=document.createElement('th');g.style.width='4px';tr2.appendChild(g);}
+    y.t.forEach(t=>{const th=document.createElement('th');th.textContent=t;th.style.width='28px';tr2.appendChild(th);});
+  });
+  thead.appendChild(tr2);table.appendChild(thead);
+  const tbody=document.createElement('tbody');
+  data.forEach((row,i)=>{
+    const tr=document.createElement('tr');const nameTd=document.createElement('td');nameTd.className='item-col';nameTd.textContent=items[i];tr.appendChild(nameTd);
+    let colIdx=0;
+    years.forEach((y,yi)=>{
+      if(yi>0){const g=document.createElement('td');g.style.width='4px';tr.appendChild(g);}
+      y.t.forEach(()=>{
+        const val=row[colIdx];const td=document.createElement('td');const cell=document.createElement('div');cell.className='hm-cell';
+        if(colIdx>=futureFrom||val===null){cell.style.cssText='background:transparent;border:1px dashed #ccc;color:#ccc;';}
+        else{cell.style.background=rateToColor(val);cell.style.color=val>=0.5?'#E1F5EE':'#085041';cell.textContent=Math.round(val*100)+'%';}
+        td.appendChild(cell);tr.appendChild(td);colIdx++;
+      });
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+// ===== CAT CHARTS =====
+let catCharts={};
+function buildCatChart(ci,cat,scores,avgs,yl){
+  const canvas=document.getElementById(`cat-chart-${ci}`);if(!canvas||catCharts[ci])return;
+  catCharts[ci]=new Chart(canvas,{
+    type:'line',data:{labels:yl,datasets:[
+      {label:'あなた',data:scores,borderColor:cat.color,backgroundColor:cat.color+'18',pointBackgroundColor:cat.color,pointRadius:5,borderWidth:2.5,tension:0.3,fill:true},
+      {label:'学部平均',data:avgs,borderColor:cat.color,borderWidth:1.5,borderDash:[5,4],pointRadius:0,tension:0.3,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}点`}}},scales:{y:{min:1,max:4,ticks:{stepSize:1,font:{size:9},callback:v=>v+'点'},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}
+  });
+}
+
+// ===== DATA =====
+let chartsInited={};
+function initCharts(tab){
+  if(chartsInited[tab])return;chartsInited[tab]=true;
+  if(tab==='numbers'){
+    const gl=['2024前','2024後','2025前','2025後','2026前','休学','2027前','2027後','2028前'];
+    new Chart(document.getElementById('gpaChart'),{type:'line',data:{labels:gl,datasets:[
+      {label:'累積GPA',data:[2.58,2.59,2.60,2.61,2.62,null,2.64,2.65,2.66],borderColor:'#185FA5',backgroundColor:'#185FA520',pointBackgroundColor:'#185FA5',pointRadius:5,borderWidth:2.5,tension:0.3,fill:true,spanGaps:false},
+      {label:'学年コース別平均',data:[2.50,2.48,2.47,2.46,2.45,null,2.44,2.43,2.42],borderColor:'#85B7EB',borderWidth:1.5,borderDash:[5,4],pointRadius:0,tension:0.3,fill:false,spanGaps:false}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:2.2,max:3.0,ticks:{stepSize:0.2,font:{size:10},callback:v=>v.toFixed(1)},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:9},maxRotation:45,autoSkip:false},grid:{display:false}}}}});
+    new Chart(document.getElementById('unitChart'),{type:'bar',data:{labels:gl,datasets:[{label:'累積修得単位数',data:[18,36,54,72,89,89,106,115,124],backgroundColor:gl.map((_,i)=>i===gl.length-1?'#1D9E75':'#9FE1CB'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:140,ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'},afterDataLimits:(scale)=>{scale.max=140;}},x:{ticks:{font:{size:9},maxRotation:45,autoSkip:false},grid:{display:false}}}}});
+  }
+  if(tab==='ability') initAbility();
+  if(tab==='future') initFuture();
+}
+
+function initAbility(){
+  // Q5
+  const q5=[{qNum:'Q5-A',text:'授業中に質問した',score:2,avg:2.1},{qNum:'Q5-B',text:'自分の意見を論理的に主張した',score:2,avg:2.3},{qNum:'Q5-C',text:'科学的研究の記事や論文を読んだ',score:3,avg:3.1},{qNum:'Q5-D',text:'自発的に作文の練習をした',score:3,avg:3.2},{qNum:'Q5-E',text:'インターネット上の情報が事実かどうか確認した',score:2,avg:2.4},{qNum:'Q5-F',text:'授業以外に興味のあることを自分で勉強した',score:2,avg:2.2},{qNum:'Q5-G',text:'困難なことにあえて挑戦した',score:2,avg:2.3},{qNum:'Q5-H',text:'読書をした（マンガ・雑誌を除く）',score:2,avg:2.5}];
+  const st=['','ひんぱんにした','ときどきした','あまりしなかった','まったくしなかった'];
+  const q5el=document.getElementById('q5-list');
+  q5.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q5el.appendChild(row);});
+
+  // Q8
+  const q8=[{qNum:'Q8-A',text:'自身の長所と短所について深く理解し、強みの部分を発揮する',score:2,avg:2.3},{qNum:'Q8-B',text:'自己の成長課題を定め、達成のための行動をとる',score:2,avg:2.1},{qNum:'Q8-C',text:'自らの行動を自分で決める',score:3,avg:2.8},{qNum:'Q8-D',text:'多様な情報源から複数の信頼できる情報を集める',score:2,avg:2.2},{qNum:'Q8-E',text:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',score:2,avg:2.0},{qNum:'Q8-F',text:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',score:2,avg:2.1},{qNum:'Q8-G',text:'得られた情報や他の人の意見の根拠・論拠について検討する',score:2,avg:2.3},{qNum:'Q8-H',text:'さまざまな事柄について倫理的な観点から検討する',score:3,avg:2.6},{qNum:'Q8-I',text:'自分とは異なる価値観や社会的・文化的背景を学ぶ',score:2,avg:2.1},{qNum:'Q8-J',text:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',score:2,avg:2.2},{qNum:'Q8-K',text:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',score:3,avg:2.7},{qNum:'Q8-L',text:'他の人と協力して物事に取り組む',score:3,avg:2.8},{qNum:'Q8-M',text:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',score:2,avg:2.1},{qNum:'Q8-N',text:'地域の環境・社会・人の問題に関心を持つ',score:2,avg:2.0},{qNum:'Q8-O',text:'日本以外の国やグローバル社会の問題に関心を持つ',score:2,avg:2.1},{qNum:'Q8-P',text:'社会問題に関心を持つ',score:2,avg:2.2}];
+  const st8=['','いつも','かなり','少し','めったに/全くしない'];
+  const q8el=document.getElementById('q8-list');
+  q8.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-scale-note">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st8[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q8el.appendChild(row);});
+
+  // Q9 snap
+  buildFaceLegend('face-legend-snap');
+  const q9s=[{qNum:'Q9-A',text:'大学で学ぶことが楽しみだ',score:1,maj:1},{qNum:'Q9-B',text:'入学できてほっとしている',score:1,maj:1},{qNum:'Q9-C',text:'長崎大学に入学できて満足している',score:1,maj:1},{qNum:'Q9-D',text:'大学でうまくやっていく自信がある',score:2,maj:2},{qNum:'Q9-E',text:'大学の授業についていけるか心配だ',score:3,maj:2},{qNum:'Q9-F',text:'友だちができるか心配だ',score:2,maj:3},{qNum:'Q9-G',text:'一人暮らしが不安だ',score:3,maj:3},{qNum:'Q9-H',text:'お金のことが心配だ',score:2,maj:3}];
+  const faceLabels={1:'あてはまる',2:'どちらかといえばあてはまる',3:'どちらかといえばあてはまらない',4:'あてはまらない'};
+  const tbl=document.getElementById('q9-snap-table');
+  const th=document.createElement('thead');const hr=document.createElement('tr');
+  hr.innerHTML='<th class="q-col">設問</th>';
+  [1,2,3,4].forEach(lv=>{hr.innerHTML+=`<th style="width:54px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;">${makeFace(lv,24)}<div style="font-size:7px;color:var(--text-tertiary);line-height:1.2;max-width:50px;">${faceLabels[lv]}</div></div></th>`;});
+  hr.innerHTML+='<th style="font-size:10px;color:var(--text-secondary);padding-left:8px;text-align:left;font-weight:700;">学部で<br>最も多かった回答</th>';
+  th.appendChild(hr);tbl.appendChild(th);
+  const tb=document.createElement('tbody');
+  q9s.forEach(item=>{
+    const tr=document.createElement('tr');const tdQ=document.createElement('td');tdQ.className='q-col';
+    tdQ.innerHTML=`<div class="q-tag">${item.qNum}</div><div style="font-size:12px;color:var(--text);line-height:1.6;">${item.text}</div>`;tr.appendChild(tdQ);
+    [1,2,3,4].forEach(lv=>{const td=document.createElement('td');td.className='face-col';const w=document.createElement('div');w.style.cssText=`display:flex;align-items:center;justify-content:center;opacity:${item.score===lv?1:0.12};`;w.innerHTML=makeFace(lv,24);td.appendChild(w);tr.appendChild(td);});
+    const tdA=document.createElement('td');tdA.style.cssText='padding-left:10px;vertical-align:middle;';tdA.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">${makeFace(item.maj,24)}<div style="font-size:9px;color:var(--text-tertiary);">学部多数</div></div>`;tr.appendChild(tdA);tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+  bsInited['bs-1']=true;
+}
+
+function initBS2(){
+  // SM
+  const smI=[{qNum:'Q1',text:'学生生活は充実していましたか',you:[2.8,3.0,3.2,3.5],avg:[2.7,2.8,2.9,3.0],color:'#378ADD'},{qNum:'Q10-A',text:'教養教育の授業・カリキュラムへの満足度',you:[2.5,2.8,3.0,3.2],avg:[2.4,2.6,2.7,2.8],color:'#1D9E75'},{qNum:'Q10-B',text:'語学の授業・カリキュラムへの満足度',you:[2.3,2.5,2.8,3.0],avg:[2.3,2.5,2.6,2.7],color:'#1D9E75'},{qNum:'Q10-C',text:'専門教育・学部授業への満足度',you:[2.6,3.0,3.1,3.4],avg:[2.5,2.7,2.8,2.9],color:'#1D9E75'},{qNum:'Q10-E',text:'健康・保健支援への満足度',you:[2.4,2.6,2.8,3.0],avg:[2.3,2.5,2.6,2.7],color:'#1D9E75'},{qNum:'Q10-F',text:'生活・経済支援への満足度',you:[2.2,2.4,2.6,2.8],avg:[2.2,2.4,2.5,2.6],color:'#1D9E75'},{qNum:'Q10-G',text:'就職・キャリア支援への満足度',you:[1.8,2.2,2.6,3.0],avg:[2.0,2.3,2.5,2.7],color:'#1D9E75'},{qNum:'Q11',text:'この1年を通して学習意欲はどうなりましたか',you:[2.2,2.5,3.0,3.2],avg:[2.1,2.4,2.6,2.8],color:'#BA7517'}];
+  const smY=['1年次','2年次','3年次','4年次'];
+  const smC=document.getElementById('sm-container');
+  smI.forEach((item,idx)=>{
+    const card=document.createElement('div');card.className='sm-card';
+    card.innerHTML=`<div class="sm-qtag">${item.qNum}</div><div class="sm-title">${item.text}</div><div class="sm-chart-wrap"><canvas id="sm-${idx}" role="img" aria-label="${item.text}の推移"></canvas></div><div class="sm-legend"><div class="sm-leg"><div class="sm-leg-line" style="background:${item.color}"></div>あなた</div><div class="sm-leg"><div class="sm-leg-dash" style="border-color:${item.color}"></div>学部平均</div></div>`;
+    smC.appendChild(card);
+    setTimeout(()=>{const cv=document.getElementById(`sm-${idx}`);if(!cv)return;new Chart(cv,{type:'line',data:{labels:smY,datasets:[{data:item.you,borderColor:item.color,backgroundColor:item.color+'20',pointBackgroundColor:item.color,pointRadius:4,borderWidth:2,tension:0.3,fill:true},{data:item.avg,borderColor:item.color,borderWidth:1.2,borderDash:[4,3],pointRadius:0,tension:0.3,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:1,max:4,ticks:{stepSize:1,font:{size:8},callback:v=>v+'点'},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:8},maxRotation:0},grid:{display:false}}}}});},80+idx*30);
+  });
+  // Q17
+  buildFaceLegend('face-legend-q17');
+  const q17=[{qNum:'Q17-A',text:'大学で学ぶことが楽しい',scores:[2,2,2,1]},{qNum:'Q17-B',text:'大学でうまくやっている自信がある',scores:[3,3,2,2]},{qNum:'Q17-C',text:'大学の授業についていけていないように感じる',scores:[2,3,3,4]},{qNum:'Q17-D',text:'友だちやクラスメートとの関係に不安がある',scores:[2,3,4,4]},{qNum:'Q17-F',text:'誰かに聞いてもらいたい悩みがあるが、誰に相談すればよいか分からない',scores:[2,3,3,4]},{qNum:'Q17-G',text:'所属している学科・コース・専攻に向いていない気がする',scores:[2,3,3,4]},{qNum:'Q17-H',text:'所属している学部に向いていない気がする',scores:[2,3,4,4]},{qNum:'Q17-I',text:'長崎大学に向いていない気がする',scores:[2,3,4,4]}];
+  const q17y=['1年次','2年次','3年次','4年次'];
+  const t17=document.getElementById('q17-table');
+  const th17=document.createElement('thead');const hr17=document.createElement('tr');
+  hr17.innerHTML='<th class="q-col">設問</th>';
+  q17y.forEach(y=>{hr17.innerHTML+=`<th style="width:48px;">${y}</th>`;});
+  th17.appendChild(hr17);t17.appendChild(th17);
+  const tb17=document.createElement('tbody');
+  q17.forEach(item=>{const tr=document.createElement('tr');const tdQ=document.createElement('td');tdQ.className='q-col';tdQ.innerHTML=`<div class="q-tag">${item.qNum}</div><div style="font-size:12px;color:var(--text);line-height:1.6;">${item.text}</div>`;tr.appendChild(tdQ);item.scores.forEach(s=>{const td=document.createElement('td');td.className='face-col';td.innerHTML=makeFace(s,24);tr.appendChild(td);});tb17.appendChild(tr);});
+  t17.appendChild(tb17);
+}
+
+function initBS3(){
+  const yl=['1年次','2年次','3年次','4年次'];
+  const cats=[
+    {name:'自己理解・主体性',color:'#378ADD',items:[
+      {qNum:'Q9-A',fullText:'自身の長所と短所について深く理解し、強みの部分を発揮する',scores:[2,2,3,3],avg:[2.1,2.3,2.5,2.6]},
+      {qNum:'Q9-B',fullText:'自己の成長課題を定め、達成のための行動をとる',scores:[1,2,3,3],avg:[2.0,2.1,2.3,2.4]},
+      {qNum:'Q9-C',fullText:'自らの行動を自分で決める',scores:[2,3,3,4],avg:[2.5,2.8,2.9,3.0]},
+    ]},
+    {name:'情報収集・論理的思考',color:'#7F77DD',items:[
+      {qNum:'Q9-D',fullText:'多様な情報源から複数の信頼できる情報を集める',scores:[1,2,2,3],avg:[2.0,2.2,2.4,2.5]},
+      {qNum:'Q9-E',fullText:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',scores:[1,2,2,3],avg:[1.9,2.0,2.2,2.3]},
+      {qNum:'Q9-F',fullText:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',scores:[2,2,3,3],avg:[2.0,2.1,2.3,2.4]},
+      {qNum:'Q9-G',fullText:'得られた情報や他の人の意見の根拠・論拠について検討する',scores:[2,2,2,3],avg:[2.1,2.3,2.5,2.6]},
+    ]},
+    {name:'倫理観・多様性',color:'#D85A30',items:[
+      {qNum:'Q9-H',fullText:'さまざまな事柄について倫理的な観点から検討する',scores:[2,3,3,3],avg:[2.4,2.6,2.7,2.8]},
+      {qNum:'Q9-I',fullText:'自分とは異なる価値観や社会的・文化的背景を学ぶ',scores:[2,2,3,3],avg:[2.1,2.2,2.3,2.4]},
+      {qNum:'Q9-J',fullText:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',scores:[1,2,2,3],avg:[2.0,2.2,2.4,2.5]},
+    ]},
+    {name:'協働・コミュニケーション',color:'#1D9E75',items:[
+      {qNum:'Q9-K',fullText:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',scores:[2,3,3,4],avg:[2.5,2.7,2.8,2.9]},
+      {qNum:'Q9-L',fullText:'他の人と協力して物事に取り組む',scores:[3,3,3,4],avg:[2.6,2.8,2.9,3.0]},
+      {qNum:'Q9-M',fullText:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',scores:[2,2,3,3],avg:[2.0,2.1,2.3,2.4]},
+    ]},
+    {name:'社会・地域への関心',color:'#BA7517',items:[
+      {qNum:'Q9-N',fullText:'地域の環境・社会・人の問題に関心を持つ',scores:[1,2,2,3],avg:[1.9,2.0,2.1,2.3]},
+      {qNum:'Q9-O',fullText:'日本以外の国やグローバル社会の問題に関心を持つ',scores:[2,2,3,3],avg:[2.0,2.1,2.2,2.4]},
+      {qNum:'Q9-P',fullText:'社会問題に関心を持つ',scores:[2,2,2,3],avg:[2.1,2.2,2.3,2.5]},
+    ]},
+  ];
+  function cs(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+it.scores[yi],0);return parseFloat((s/cat.items.length).toFixed(2));});}
+  function ca(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+it.avg[yi],0);return parseFloat((s/cat.items.length).toFixed(2));});}
+  const sl=['','いつも','かなり','少し','めったに/全くしない'];
+  const cont=document.getElementById('growth-cats');
+  cats.forEach((cat,ci)=>{
+    const scores=cs(cat),avgs=ca(cat);
+    const latest=scores[scores.length-1],prev=scores[scores.length-2];
+    const diff=parseFloat((latest-prev).toFixed(1));
+    const diffText=diff>0?`▲${diff}`:diff<0?`▼${Math.abs(diff)}`:'－';
+    const block=document.createElement('div');block.className='cat-block';
+    const header=document.createElement('div');header.className='cat-header';
+    header.innerHTML=`<div class="cat-left"><div style="width:12px;height:12px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div><span class="cat-title">${cat.name}</span><span class="score-badge ${diff>0?'badge-up':'badge-same'}">${latest.toFixed(1)}点 ${diffText}</span></div><span class="cat-arrow ${ci===0?'open':''}">▼</span>`;
+    const body=document.createElement('div');body.className=`cat-body${ci===0?' open':''}`;
+    const ca_area=document.createElement('div');ca_area.className='cat-chart-area';
+    ca_area.innerHTML=`<div class="cat-chart-title">このカテゴリのスコア推移（4点満点）</div><div style="position:relative;height:140px;"><canvas id="cat-chart-${ci}" role="img" aria-label="${cat.name}の推移"></canvas></div><div style="display:flex;gap:14px;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--border);"><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:2px;background:${cat.color};display:inline-block;border-radius:1px;"></span>あなた</span><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:0;border-top:1.5px dashed ${cat.color};display:inline-block;"></span>学部平均</span></div>`;
+    const ql=document.createElement('div');ql.className='q-list';
+    cat.items.forEach(item=>{
+      const ls=item.scores[item.scores.length-1],la=item.avg[item.avg.length-1];
+      const row=document.createElement('div');row.className='q-row';
+      row.innerHTML=`<div class="q-tag">学修状況報告（学部生）${item.qNum}</div><div class="q-full-text">${item.fullText}</div><div class="q-scale-note">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた（今年度）</span>${makeStars(ls,cat.color)}<span style="font-size:12px;font-weight:700;color:${cat.color};margin-left:4px;">${sl[ls]}</span></div><div class="q-result-row"><span class="q-result-label">学部平均</span><span class="q-avg-text">${la.toFixed(1)}点（4点満点）</span></div>`;
+      ql.appendChild(row);
+    });
+    body.appendChild(ca_area);body.appendChild(ql);
+    header.onclick=()=>{const arrow=header.querySelector('.cat-arrow');const isOpen=body.classList.contains('open');body.classList.toggle('open',!isOpen);arrow.classList.toggle('open',!isOpen);if(!isOpen&&!catCharts[ci])setTimeout(()=>buildCatChart(ci,cat,scores,avgs,yl),50);};
+    block.appendChild(header);block.appendChild(body);cont.appendChild(block);
+    if(ci===0)setTimeout(()=>buildCatChart(ci,cat,scores,avgs,yl),200);
+  });
+}
+
+function initBS4(){
+  const hmY=[
+    [0.91,0.83,0.74,0.87,0.81,0.72,0.88,0.76,null],[0.18,0.31,0.42,0.23,0.47,0.28,0.22,0.38,null],[0.73,0.82,0.91,0.78,0.68,0.88,0.82,0.91,null],[0.34,0.52,0.44,0.63,0.51,0.41,0.62,0.48,null],[0.22,0.24,0.41,0.53,0.31,0.48,0.29,0.43,null],[0.63,0.42,0.34,0.71,0.62,0.33,0.44,0.68,null],[0.21,0.38,0.22,0.33,0.52,0.24,0.51,0.32,null],[0.82,0.74,0.83,0.52,0.81,0.72,0.79,0.74,null],[0.32,0.24,0.53,0.61,0.28,0.22,0.54,0.31,null],[0.71,0.43,0.62,0.34,0.72,0.31,0.68,0.63,null],[0.24,0.43,0.22,0.52,0.23,0.58,0.21,0.31,null],
+  ];
+  const hmA=[
+    [0.71,0.68,0.63,0.72,0.69,0.64,0.70,0.67,null],[0.31,0.29,0.32,0.28,0.38,0.30,0.29,0.31,null],[0.52,0.58,0.61,0.59,0.54,0.62,0.58,0.60,null],[0.42,0.44,0.43,0.48,0.41,0.43,0.47,0.44,null],[0.28,0.31,0.38,0.41,0.32,0.39,0.31,0.37,null],[0.51,0.42,0.43,0.52,0.49,0.41,0.43,0.51,null],[0.29,0.31,0.28,0.32,0.38,0.29,0.36,0.30,null],[0.62,0.59,0.63,0.52,0.61,0.58,0.62,0.60,null],[0.31,0.28,0.38,0.42,0.29,0.27,0.39,0.30,null],[0.52,0.41,0.49,0.38,0.51,0.40,0.52,0.48,null],[0.28,0.31,0.29,0.38,0.27,0.41,0.28,0.30,null],
+  ];
+  buildHeatmap('hm-you',hmY,8);
+  buildHeatmap('hm-avg',hmA,8);
+}
+
+function initBS5(){
+  const rubricItems=[
+    {label:'主体性',scores:[1,2,2,3,2,3,3,4],avg:2.5},{label:'情報リテラシー',scores:[1,2,3,3,2,3,4,4],avg:2.7},{label:'論理的組立て',scores:[1,1,2,2,3,3,3,3],avg:2.4},{label:'批判的検討',scores:[1,1,2,2,2,3,3,3],avg:2.3},{label:'倫理観',scores:[2,2,3,3,3,3,3,4],avg:2.8},{label:'多様性の理解',scores:[1,2,2,2,3,3,3,3],avg:2.5},{label:'協働性',scores:[2,2,3,3,3,4,4,4],avg:2.9},{label:'考えをやりとりする力',scores:[1,2,2,3,3,3,3,4],avg:2.6},{label:'国際・地域社会への関心',scores:[1,1,2,2,2,3,3,3],avg:2.4},
+  ];
+  const rubricTerms=['1前','1後','2前','2後','3前','3後','4前','4後'];
+  const el=document.getElementById('rubric-list');
+  rubricItems.forEach(item=>{
+    const row=document.createElement('div');row.className='rubric-row';
+    const avgPct=(item.avg/5)*100;
+    let bars='';
+    item.scores.forEach((s,i)=>{const pct=(s/5)*100;const isLatest=i===item.scores.length-1;bars+=`<div title="${rubricTerms[i]}: ${s}点" style="flex:1;height:100%;background:${isLatest?'#1D9E75':'#9FE1CB'};opacity:${isLatest?1:0.65};border-right:1px solid #fff;"></div>`;});
+    row.innerHTML=`<div class="rubric-label">${item.label}</div><div class="rubric-track"><div style="display:flex;height:100%;">${bars}</div><div style="position:absolute;top:0;left:${avgPct}%;width:2px;height:100%;background:#E24B4A;opacity:0.85;"></div></div><div class="rubric-val">${item.scores[item.scores.length-1]}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function initFuture(){
+  buildTimeline('q19-tl',[{year:'1年',yearLabel:'1年次末',text:'公務員（土木職）として長崎市の都市計画に携わりたいと思っています。'},{year:'2年',yearLabel:'2年次末',text:'公務員（土木職）の志望は変わりません。インターンシップで実際の業務を体験したいと思っています。'},{year:'3年',yearLabel:'3年次末',text:'北海道庁でインターンシップを経験し、公務員の仕事に確信が持てました。引き続き公務員試験に向けて準備を進めます。'},{year:'4年',yearLabel:'4年次末',text:null}]);
+  buildTimeline('q22-tl',[{year:'1年',yearLabel:'1年次末',text:'将来の見通しは持っているが、具体的な行動にはまだ結びついていない。'},{year:'2年',yearLabel:'2年次末',text:'将来の見通しを持っており、それに向けて少しずつ行動し始めている。'},{year:'3年',yearLabel:'3年次末',text:'将来の見通しを持っており、それに向けて具体的に行動している。'},{year:'4年',yearLabel:'4年次末',text:null}]);
+  buildTimeline('q18q15-tl',[{year:'1年',yearLabel:'1年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'語学力の向上、インターンシップへの参加、ボランティア活動'},{label:'Q15 就職活動',text:'就職活動はまだ行っていない。'}]},{year:'2年',yearLabel:'2年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'公務員試験の勉強、インターンシップ参加、卒業研究の充実'},{label:'Q15 就職活動',text:'就職活動はまだ行っていない。インターンシップには参加した。'}]},{year:'3年',yearLabel:'3年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'公務員試験合格、卒業論文の完成'},{label:'Q15 就職活動',text:'公務員試験に向けた勉強を本格的に開始した。'}]},{year:'4年',yearLabel:'4年次末',entries:[{label:'Q18 卒業後にしたいこと',text:null},{label:'Q15 就職活動',text:null}]}]);
+  buildTimeline('q6-tl',[{year:'1年',yearLabel:'1年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'1〜2時間未満'},{label:'Q6-D 授業以外の自主学習',text:'30分〜1時間未満'},{label:'Q6-F 部活・サークル活動',text:'3〜5時間未満'},{label:'Q6-H アルバイト・仕事',text:'5〜7時間未満'}]},{year:'2年',yearLabel:'2年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'2〜3時間未満'},{label:'Q6-D 授業以外の自主学習',text:'1〜2時間未満'},{label:'Q6-F 部活・サークル活動',text:'3〜5時間未満'},{label:'Q6-H アルバイト・仕事',text:'7〜14時間未満'}]},{year:'3年',yearLabel:'3年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'3〜5時間未満'},{label:'Q6-C 専門ゼミ・卒論研究',text:'1〜2時間未満'},{label:'Q6-D 授業以外の自主学習',text:'1〜2時間未満'},{label:'Q6-H アルバイト・仕事',text:'5〜7時間未満'}]},{year:'4年',yearLabel:'4年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:null},{label:'Q6-C 専門ゼミ・卒論研究',text:null},{label:'Q6-H アルバイト・仕事',text:null}]}]);
+  buildTimeline('q14-tl',[{year:'1年',yearLabel:'1年次末',text:'今年度はインターンシップに参加しなかった。（学部で参加経験あり：12.3%）'},{year:'2年',yearLabel:'2年次末',text:'1回参加（3日間）。北海道庁でのインターンシップ（学外実習）を体験した。（学部で参加経験あり：32.4%）'},{year:'3年',yearLabel:'3年次末',text:'2回参加（合計12日間）。最短3日・最長9日。（学部で参加経験あり：58.7%）'},{year:'4年',yearLabel:'4年次末',text:null}]);
+  const gd=[{period:'1年次前期',text:'大学での勉強のやり方がよく理解できずに、語学に関する必修科目および初年次セミナーが不合格となった。',mentor:'必修科目の授業には、毎回、出席するとともに、授業内容を復習すれば、単位は必ず取得できます。'},{period:'1年次後期',text:'課題に対して、自ら考え積極的に取り組むことができる様に、基礎知識を1年次に身に付けるようにしたい。',mentor:'教養教育科目の履修を通して、人文社会科学や自然科学等に関する幅広い知識を身に付けて下さい。'},{period:'2年次前期',text:'必修科目の1/3の成績が「優」以上となるように復習に力を入れたいと思います。',mentor:'専門基礎科目の大半が必修科目です。計画を立てて、予習と復習に取組んで下さい。期待しています！'},{period:'2年次後期',text:null,mentor:null}];
+  const gtbl=document.getElementById('goal-table');
+  const gth=document.createElement('thead');gth.innerHTML='<tr><th>年次・学期</th><th>今学期の省察と次期の目標 ／ メンターからの助言</th></tr>';gtbl.appendChild(gth);
+  const gtb=document.createElement('tbody');
+  gd.forEach(item=>{const tr=document.createElement('tr');const td1=document.createElement('td');td1.textContent=item.period;const td2=document.createElement('td');td2.innerHTML=`<div style="font-size:13px;color:${item.text?'var(--text)':'var(--text-tertiary)'};line-height:1.7;font-style:${item.text?'normal':'italic'}">${item.text||'（未入力）'}</div>${item.mentor?`<div class="mentor-comment"><div class="mentor-label">👨‍🏫 メンターからの助言</div>${item.mentor}</div>`:''}`;tr.appendChild(td1);tr.appendChild(td2);gtb.appendChild(tr);});
+  gtbl.appendChild(gtb);
+  buildTimeline('dream-tl',[{year:'3前',yearLabel:'3年次前期',text:'夏季休暇に北海道庁でインターンシップ（学外実習）を希望しています。北海道庁のインターンシップへの応募方法を教えて下さい。'},{year:'3後',yearLabel:'3年次後期',text:'公務員（土木総合職）となって、長崎市の都市計画に携わりたいと思っています。公務員試験の勉強方法を教えて下さい。'},{year:'4前',yearLabel:'4年次前期',text:'卒業研究テーマが「有明海の流動特性と水質変化に関する現地観測」に決まりました。7月から現地観測を開始しています。'}]);
+  buildTimeline('other-tl',[{year:'2前',yearLabel:'2年次前期',text:'1年次からテニスサークルに所属しており、車いすテニス大会でボランティアを行いました。'},{year:'3前',yearLabel:'3年次前期',text:'ケニア・ジョモケニヤッタ農工大学主催のロボットコンテストに参加し、優秀賞を獲得しました。'},{year:'4後',yearLabel:'4年次後期',text:'土木の日の催し「テクノパワー土木おもしろ体験隊」に参加して、小学生を対象に水理実験を行って説明しました。'}]);
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{
+  initAbility();
+  bsInited['bs-1']=true;
+});
+</script>
+</body>
+</html>
