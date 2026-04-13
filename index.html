@@ -356,6 +356,38 @@ body {
   .data-table { font-size: 11px; }
   .data-table th, .data-table td { padding: 6px 6px; }
 }
+
+/* ===== Q6 TIME TABLE ===== */
+.time-table { width:100%; border-collapse:collapse; font-size:12px; }
+.time-table th { background:var(--blue-dark); color:#fff; padding:8px 10px; text-align:center; font-weight:700; font-size:11px; white-space:nowrap; }
+.time-table th.item-col { text-align:left; min-width:140px; }
+.time-table td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:middle; font-size:12px; }
+.time-table td.item-col { font-weight:700; color:var(--text); background:#f8f9fa; }
+.time-table td.val-cell { text-align:center; color:var(--text-secondary); }
+.time-table td.future-cell { text-align:center; color:#ccc; font-style:italic; }
+.time-table tr:last-child td { border-bottom:none; }
+
+/* ===== RUBRIC CHART GRID (図1スタイル) ===== */
+.rubric-grid-table { width:100%; border-collapse:collapse; table-layout:fixed; font-size:11px; }
+.rubric-grid-table th { background:#f5f0e8; font-size:11px; font-weight:700; text-align:center; padding:7px 4px; border:1px solid #ccc; color:#333; }
+.rubric-grid-table th.obs-th { text-align:center; width:110px; background:#f5f0e8; }
+.rubric-grid-table th.axis-th { width:22px; background:#f5f0e8; border:1px solid #ccc; }
+.rubric-grid-table td.obs-td { background:#f5f0e8; font-size:12px; font-weight:700; text-align:center; vertical-align:middle; padding:6px 4px; border:1px solid #ccc; color:#333; line-height:1.4; }
+.rubric-grid-table td.axis-td { background:#fff; border:1px solid #ccc; vertical-align:bottom; padding:0; width:22px; position:relative; }
+.rubric-grid-table td.chart-td { padding:0; border:1px solid #ccc; vertical-align:bottom; position:relative; background:#fff; }
+.rubric-grid-table td.chart-td.future-td { background:#fafafa; }
+.rubric-cell-inner { position:relative; width:100%; height:80px; overflow:hidden; }
+.rubric-bar-col { position:absolute; bottom:0; left:0; width:100%; background:#2aaa90; }
+.rubric-yaxis-inner { position:relative; width:100%; height:80px; }
+.rubric-ytick-label { position:absolute; right:3px; font-size:8px; color:#666; line-height:1; transform:translateY(50%); }
+.rubric-lv4-hline { position:absolute; left:0; right:0; height:2px; background:#E24B4A; z-index:10; pointer-events:none; }
+.rubric-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+.rubric-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-secondary); }
+.rubric-input-placeholder { background:#f8f9fa; border:2px dashed #b0b8c8; border-radius:var(--radius); padding:28px; text-align:center; margin-top:20px; }
+.rubric-input-title { font-size:14px; font-weight:700; color:var(--text-secondary); margin-bottom:6px; }
+.rubric-input-sub { font-size:12px; color:var(--text-tertiary); }
+
+
 </style>
 </head>
 <body>
@@ -378,6 +410,7 @@ body {
 
 <nav class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('dp',this)">🎓 ディプロマ・ポリシー</button>
+  <button class="tab-btn" onclick="switchTab('rubric',this)">📋 自己評価ルーブリック</button>
   <button class="tab-btn" onclick="switchTab('profile',this)">👤 自己紹介</button>
   <button class="tab-btn" onclick="switchTab('numbers',this)">📊 数字で見る私</button>
   <button class="tab-btn" onclick="switchTab('ability',this)">🌱 能力で見る私</button>
@@ -574,6 +607,16 @@ body {
       </table>
     </div>
   </div>
+
+  <div class="card" style="margin-top:14px;">
+    <div class="q-tag">学修状況報告（学部生）Q6B〜H</div>
+    <div class="card-title">1週間の時間の使い方（学期別）</div>
+    <div class="card-sub">各学期で典型的な1週間の活動時間を回答したものです　－ = 未回答</div>
+    <div style="overflow-x:auto;">
+      <table class="time-table" id="q6-time-table"></table>
+    </div>
+  </div>
+
 </div>
 
 <!-- ===== TAB: ABILITY ===== -->
@@ -751,27 +794,6 @@ body {
     </div>
   </div>
 
-  <!-- BIG SECTION 5: 自己評価ルーブリック -->
-  <div class="big-section" id="bs-5">
-    <div class="big-section-header" onclick="toggleBigSection('bs-5')">
-      <div class="big-section-left">
-        <div class="big-section-icon" style="background:#fff4e0;">📋</div>
-        <div class="big-section-info">
-          <div class="big-section-title">自己評価ルーブリック</div>
-          <div class="big-section-desc">身についた能力の学期ごとの推移（5点満点）</div>
-        </div>
-      </div>
-      <span class="big-section-arrow" id="bs-5-arrow">▼</span>
-    </div>
-    <div class="big-section-body" id="bs-5-body">
-      <div style="height:16px;"></div>
-      <div class="card">
-        <div class="card-title">身についた能力の推移（学期ごと）</div>
-        <div class="card-sub">5点満点 ／ 各学期末に自己評価を入力　赤線 = コース平均</div>
-        <div id="rubric-list"></div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- ===== TAB: FUTURE ===== -->
@@ -805,13 +827,6 @@ body {
     <div class="q-tag">学修状況報告（学部生）Q18・Q15</div>
     <div class="card-title">卒業後に備えてしたいこと ／ 就職活動の状況</div>
     <div class="timeline" id="q18q15-tl"></div>
-  </div>
-
-  <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">⏱ 時間の使い方（Q6B〜H）</span>
-  <div class="card">
-    <div class="q-tag">学修状況報告（学部生）Q6B〜H</div>
-    <div class="card-title">1週間の時間の使い方（年度別記録）</div>
-    <div class="timeline" id="q6-tl"></div>
   </div>
 
   <span class="label-pill" style="background:var(--purple-light);color:#3C3489;">💼 インターンシップ（Q14・SQ14）</span>
@@ -928,6 +943,40 @@ body {
   </div>
 </div>
 
+
+<!-- ===== TAB: RUBRIC ===== -->
+<div id="tab-rubric" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fff4e0;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="3" stroke="#b06a00" stroke-width="1.6"/><path d="M5 7h10M5 10h10M5 13h6" stroke="#b06a00" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </div>
+    <div class="section-title">自己評価ルーブリック</div>
+  </div>
+  <p class="section-sub">各学期末に9つの観点について自己評価を行います。レベル1〜5で評価し、レベル4が卒業要件を満たす目安です。自分の成長の軌跡を確認しましょう。</p>
+
+  <div class="card">
+    <div class="card-title">能力の成長推移（学期別・4点満点）</div>
+    <div class="card-sub">各観点のレベルが学期ごとにどう変化したかを表示　赤横線 = レベル4（卒業要件の目安）　赤丸 = コース平均</div>
+
+    <div class="rubric-legend">
+      <div class="rubric-legend-item">
+        <div style="width:18px;height:10px;border-radius:3px;background:#2aaa90;"></div>あなたのレベル
+      </div>
+      <div class="rubric-legend-item">
+        <div style="width:22px;height:2px;background:#E24B4A;"></div>
+        <span>レベル4ライン（卒業要件の目安）</span>
+      </div>
+    </div>
+
+    <div id="rubric-chart-grid"></div>
+  </div>
+
+  <div class="rubric-input-placeholder">
+    <div class="rubric-input-title">📝 自己評価の入力</div>
+    <div class="rubric-input-sub">現行システムの入力機能がここに入ります<br>（DP観点ごとの折りたたみ・レベル1〜5のラジオボタン選択・保存）</div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -962,7 +1011,6 @@ function initBigSection(id) {
   if(id==='bs-2') initBS2();
   if(id==='bs-3') initBS3();
   if(id==='bs-4') initBS4();
-  if(id==='bs-5') initBS5();
 }
 
 // ===== FACE =====
@@ -1091,6 +1139,8 @@ function initCharts(tab){
   }
   if(tab==='ability') initAbility();
   if(tab==='future') initFuture();
+  if(tab==='rubric'){initRubric();}
+  if(tab==='numbers'){buildQ6Table();}
 }
 
 function initAbility(){
@@ -1242,7 +1292,7 @@ function initFuture(){
   buildTimeline('q19-tl',[{year:'1年',yearLabel:'1年次末',text:'公務員（土木職）として長崎市の都市計画に携わりたいと思っています。'},{year:'2年',yearLabel:'2年次末',text:'公務員（土木職）の志望は変わりません。インターンシップで実際の業務を体験したいと思っています。'},{year:'3年',yearLabel:'3年次末',text:'北海道庁でインターンシップを経験し、公務員の仕事に確信が持てました。引き続き公務員試験に向けて準備を進めます。'},{year:'4年',yearLabel:'4年次末',text:null}]);
   buildTimeline('q22-tl',[{year:'1年',yearLabel:'1年次末',text:'将来の見通しは持っているが、具体的な行動にはまだ結びついていない。'},{year:'2年',yearLabel:'2年次末',text:'将来の見通しを持っており、それに向けて少しずつ行動し始めている。'},{year:'3年',yearLabel:'3年次末',text:'将来の見通しを持っており、それに向けて具体的に行動している。'},{year:'4年',yearLabel:'4年次末',text:null}]);
   buildTimeline('q18q15-tl',[{year:'1年',yearLabel:'1年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'語学力の向上、インターンシップへの参加、ボランティア活動'},{label:'Q15 就職活動',text:'就職活動はまだ行っていない。'}]},{year:'2年',yearLabel:'2年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'公務員試験の勉強、インターンシップ参加、卒業研究の充実'},{label:'Q15 就職活動',text:'就職活動はまだ行っていない。インターンシップには参加した。'}]},{year:'3年',yearLabel:'3年次末',entries:[{label:'Q18 卒業後にしたいこと',text:'公務員試験合格、卒業論文の完成'},{label:'Q15 就職活動',text:'公務員試験に向けた勉強を本格的に開始した。'}]},{year:'4年',yearLabel:'4年次末',entries:[{label:'Q18 卒業後にしたいこと',text:null},{label:'Q15 就職活動',text:null}]}]);
-  buildTimeline('q6-tl',[{year:'1年',yearLabel:'1年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'1〜2時間未満'},{label:'Q6-D 授業以外の自主学習',text:'30分〜1時間未満'},{label:'Q6-F 部活・サークル活動',text:'3〜5時間未満'},{label:'Q6-H アルバイト・仕事',text:'5〜7時間未満'}]},{year:'2年',yearLabel:'2年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'2〜3時間未満'},{label:'Q6-D 授業以外の自主学習',text:'1〜2時間未満'},{label:'Q6-F 部活・サークル活動',text:'3〜5時間未満'},{label:'Q6-H アルバイト・仕事',text:'7〜14時間未満'}]},{year:'3年',yearLabel:'3年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:'3〜5時間未満'},{label:'Q6-C 専門ゼミ・卒論研究',text:'1〜2時間未満'},{label:'Q6-D 授業以外の自主学習',text:'1〜2時間未満'},{label:'Q6-H アルバイト・仕事',text:'5〜7時間未満'}]},{year:'4年',yearLabel:'4年次末',entries:[{label:'Q6-B 授業課題・予習復習',text:null},{label:'Q6-C 専門ゼミ・卒論研究',text:null},{label:'Q6-H アルバイト・仕事',text:null}]}]);
+  // q6 moved to numbers tab (buildQ6Table)
   buildTimeline('q14-tl',[{year:'1年',yearLabel:'1年次末',text:'今年度はインターンシップに参加しなかった。（学部で参加経験あり：12.3%）'},{year:'2年',yearLabel:'2年次末',text:'1回参加（3日間）。北海道庁でのインターンシップ（学外実習）を体験した。（学部で参加経験あり：32.4%）'},{year:'3年',yearLabel:'3年次末',text:'2回参加（合計12日間）。最短3日・最長9日。（学部で参加経験あり：58.7%）'},{year:'4年',yearLabel:'4年次末',text:null}]);
   const gd=[{period:'1年次前期',text:'大学での勉強のやり方がよく理解できずに、語学に関する必修科目および初年次セミナーが不合格となった。',mentor:'必修科目の授業には、毎回、出席するとともに、授業内容を復習すれば、単位は必ず取得できます。'},{period:'1年次後期',text:'課題に対して、自ら考え積極的に取り組むことができる様に、基礎知識を1年次に身に付けるようにしたい。',mentor:'教養教育科目の履修を通して、人文社会科学や自然科学等に関する幅広い知識を身に付けて下さい。'},{period:'2年次前期',text:'必修科目の1/3の成績が「優」以上となるように復習に力を入れたいと思います。',mentor:'専門基礎科目の大半が必修科目です。計画を立てて、予習と復習に取組んで下さい。期待しています！'},{period:'2年次後期',text:null,mentor:null}];
   const gtbl=document.getElementById('goal-table');
@@ -1252,6 +1302,184 @@ function initFuture(){
   gtbl.appendChild(gtb);
   buildTimeline('dream-tl',[{year:'3前',yearLabel:'3年次前期',text:'夏季休暇に北海道庁でインターンシップ（学外実習）を希望しています。北海道庁のインターンシップへの応募方法を教えて下さい。'},{year:'3後',yearLabel:'3年次後期',text:'公務員（土木総合職）となって、長崎市の都市計画に携わりたいと思っています。公務員試験の勉強方法を教えて下さい。'},{year:'4前',yearLabel:'4年次前期',text:'卒業研究テーマが「有明海の流動特性と水質変化に関する現地観測」に決まりました。7月から現地観測を開始しています。'}]);
   buildTimeline('other-tl',[{year:'2前',yearLabel:'2年次前期',text:'1年次からテニスサークルに所属しており、車いすテニス大会でボランティアを行いました。'},{year:'3前',yearLabel:'3年次前期',text:'ケニア・ジョモケニヤッタ農工大学主催のロボットコンテストに参加し、優秀賞を獲得しました。'},{year:'4後',yearLabel:'4年次後期',text:'土木の日の催し「テクノパワー土木おもしろ体験隊」に参加して、小学生を対象に水理実験を行って説明しました。'}]);
+}
+
+
+// ===== RUBRIC TAB (図1スタイル) =====
+function initRubric() {
+  const container = document.getElementById('rubric-chart-grid');
+  if (!container || container.children.length > 0) return;
+
+  const observations = [
+    '主体性',
+    '汎用的能力\n（情報リテラシー）',
+    '汎用的能力\n（論理的組立て）',
+    '汎用的能力\n（批判的検討）',
+    '倫理観',
+    '多様性の理解',
+    '協働性',
+    '考えをやりとりする力',
+    '国際・\n地域社会への関心',
+  ];
+
+  const terms = ['1年前期','1年後期','2年前期','2年後期','3年前期','3年後期','4年前期','4年後期'];
+  const futureFrom = 6;
+
+  const scores = [
+    [2, 2, 3, 3, 3, 4, null, null],
+    [1, 2, 2, 3, 3, 3, null, null],
+    [1, 2, 2, 3, 3, 4, null, null],
+    [2, 2, 3, 3, 3, 3, null, null],
+    [2, 2, 3, 3, 4, 4, null, null],
+    [1, 2, 2, 2, 3, 3, null, null],
+    [2, 3, 3, 3, 4, 4, null, null],
+    [1, 2, 2, 3, 3, 3, null, null],
+    [1, 1, 2, 2, 3, 3, null, null],
+  ];
+
+  const MAX = 5;
+  const CELL_H = 80;
+  const LV4_PCT = (4 / MAX) * 100; // 80%
+
+  const tbl = document.createElement('table');
+  tbl.className = 'rubric-grid-table';
+
+  // --- THEAD ---
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  const th0 = document.createElement('th');
+  th0.className = 'obs-th';
+  th0.textContent = '身についた能力';
+  hr.appendChild(th0);
+  // axis column header (empty)
+  const thAxis = document.createElement('th');
+  thAxis.className = 'axis-th';
+  hr.appendChild(thAxis);
+  terms.forEach((t, ti) => {
+    const th = document.createElement('th');
+    th.textContent = t;
+    if (ti >= futureFrom) th.style.color = '#aaa';
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  tbl.appendChild(thead);
+
+  // --- TBODY ---
+  const tbody = document.createElement('tbody');
+  observations.forEach((obsName, oi) => {
+    const tr = document.createElement('tr');
+
+    // Observation label
+    const obsTd = document.createElement('td');
+    obsTd.className = 'obs-td';
+    obsTd.innerHTML = obsName.replace(/\n/g, '<br>');
+    tr.appendChild(obsTd);
+
+    // Y-axis column (narrow, left of first bar)
+    const axisTd = document.createElement('td');
+    axisTd.className = 'axis-td';
+    const axisDiv = document.createElement('div');
+    axisDiv.className = 'rubric-yaxis-inner';
+    axisDiv.style.height = CELL_H + 'px';
+    // tick labels: 4, 2, 0 (only 0,2,4 as in 図1)
+    [[4, LV4_PCT], [2, (2/MAX)*100], [0, 0]].forEach(([v, pct]) => {
+      const tick = document.createElement('div');
+      tick.className = 'rubric-ytick-label';
+      tick.textContent = v;
+      tick.style.bottom = pct + '%';
+      axisDiv.appendChild(tick);
+    });
+    axisTd.appendChild(axisDiv);
+    tr.appendChild(axisTd);
+
+    // Chart cells — one per term
+    terms.forEach((t, ti) => {
+      const score = scores[oi][ti];
+      const isFuture = ti >= futureFrom;
+
+      const td = document.createElement('td');
+      td.className = 'chart-td' + (isFuture ? ' future-td' : '');
+
+      const inner = document.createElement('div');
+      inner.className = 'rubric-cell-inner';
+      inner.style.height = CELL_H + 'px';
+
+      // Lv4 red horizontal line
+      const lv4 = document.createElement('div');
+      lv4.className = 'rubric-lv4-hline';
+      lv4.style.bottom = LV4_PCT + '%';
+      inner.appendChild(lv4);
+
+      // Bar: full cell width, height = score/5
+      if (!isFuture && score !== null) {
+        const bar = document.createElement('div');
+        bar.className = 'rubric-bar-col';
+        bar.style.height = ((score / MAX) * 100) + '%';
+        inner.appendChild(bar);
+      }
+
+      td.appendChild(inner);
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+
+  const wrap = document.createElement('div');
+  wrap.style.overflowX = 'auto';
+  wrap.appendChild(tbl);
+  container.appendChild(wrap);
+}
+
+
+
+
+// ===== Q6 TIME TABLE in 数字で見る私 =====
+function buildQ6Table() {
+  const el = document.getElementById('q6-time-table');
+  if (!el || el.children.length > 0) return;
+
+  const items = [
+    { label: 'Q6-B 授業の課題・予習・復習' },
+    { label: 'Q6-C 専門ゼミ・卒論研究' },
+    { label: 'Q6-D 授業以外の自主学習（資格勉強等含む）' },
+    { label: 'Q6-E ボランティア・地域活動' },
+    { label: 'Q6-F 部活・サークル活動' },
+    { label: 'Q6-G 就職活動' },
+    { label: 'Q6-H アルバイト・仕事' },
+  ];
+
+  const terms = ['1年前期', '1年後期', '2年前期', '2年後期', '3年前期', '3年後期'];
+  const futureTerms = ['4年前期', '4年後期'];
+
+  const data = [
+    ['1〜2時間未満', '1〜2時間未満', '2〜3時間未満', '2〜3時間未満', '3〜5時間未満', '3〜5時間未満'],
+    ['全くしない', '全くしない', '全くしない', '全くしない', '1〜2時間未満', '1〜2時間未満'],
+    ['30分〜1時間未満', '30分〜1時間未満', '1〜2時間未満', '1〜2時間未満', '1〜2時間未満', '1〜2時間未満'],
+    ['全くしない', '全くしない', '全くしない', '30分未満', '30分未満', '30分未満'],
+    ['3〜5時間未満', '3〜5時間未満', '3〜5時間未満', '3〜5時間未満', '1〜2時間未満', '1〜2時間未満'],
+    ['全くしない', '全くしない', '全くしない', '全くしない', '全くしない', '1〜2時間未満'],
+    ['5〜7時間未満', '5〜7時間未満', '7〜14時間未満', '7〜14時間未満', '5〜7時間未満', '5〜7時間未満'],
+  ];
+
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  hr.innerHTML = '<th class="item-col">項目</th>';
+  terms.forEach(t => { hr.innerHTML += `<th>${t}</th>`; });
+  futureTerms.forEach(t => { hr.innerHTML += `<th style="color:rgba(255,255,255,0.5);">${t}</th>`; });
+  thead.appendChild(hr);
+  el.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  items.forEach((item, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="item-col">${item.label}</td>`;
+    data[i].forEach(val => { tr.innerHTML += `<td class="val-cell">${val}</td>`; });
+    futureTerms.forEach(() => { tr.innerHTML += '<td class="future-cell">–</td>'; });
+    tbody.appendChild(tr);
+  });
+  el.appendChild(tbody);
 }
 
 // ===== INIT =====
