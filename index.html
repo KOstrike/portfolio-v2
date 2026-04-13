@@ -639,16 +639,16 @@ body {
           <div class="big-section-desc">入学直後（2024年4月）に回答した新入生調査の結果 ／ 1回限りの記録</div>
         </div>
       </div>
-      <span class="big-section-arrow open" id="bs-1-arrow">▼</span>
+      <span class="big-section-arrow" id="bs-1-arrow">▼</span>
     </div>
-    <div class="big-section-body open" id="bs-1-body">
+    <div class="big-section-body" id="bs-1-body">
       <div style="height:16px;"></div>
       <div class="source-note">出典：<strong>学修状況報告（新入生）</strong> ／ 2024年4月実施・1回限りの記録</div>
 
       <div class="card">
         <div class="q-tag">学修状況報告（新入生）Q5A〜H</div>
         <div class="card-title">高校3年生のとき、次のことをどの程度しましたか</div>
-        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★1＝ひんぱんにした　★2＝ときどきした　★3＝あまりしなかった　★4＝まったくしなかった</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★★★★＝ひんぱんにした　★★★☆＝ときどきした　★★☆☆＝あまりしなかった　★☆☆☆＝まったくしなかった</div>
         <div id="q5-list"></div>
       </div>
 
@@ -675,7 +675,7 @@ body {
       <div class="card">
         <div class="q-tag">学修状況報告（新入生）Q8A〜P</div>
         <div class="card-title">普段、次の項目をどの程度行いますか（入学時）</div>
-        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;">回答尺度：★★★★＝いつも　★★★☆＝かなり　★★☆☆＝少し　★☆☆☆＝めったに/全くしない</div>
         <div id="q8-list"></div>
       </div>
 
@@ -1016,12 +1016,24 @@ function initBigSection(id) {
 // ===== FACE =====
 function makeFace(level,size=24){
   const c={
-    1:{bg:'#E1F5EE',st:'#0a6b4d',mouth:'M7 13 Q10 17 13 13'},
-    2:{bg:'#E6F1FB',st:'#185FA5',mouth:'M7 13.5 Q10 15.5 13 13.5'},
-    3:{bg:'#F4F4F2',st:'#4a4a4a',mouth:'M7.5 14 L12.5 14'},
-    4:{bg:'#FAECE7',st:'#993C1D',mouth:'M7 15.5 Q10 12 13 15.5'},
+    // Lv1: 大きな笑顔・目が細くなる（最もポジティブ）
+    1:{bg:'#B6EDD4',st:'#0a6b4d',
+       eyes:'<path d="M6 8 Q7.5 7 9 8" stroke="#0a6b4d" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M11 8 Q12.5 7 14 8" stroke="#0a6b4d" stroke-width="1.3" fill="none" stroke-linecap="round"/>',
+       mouth:'M5.5 13 Q10 18.5 14.5 13'},
+    // Lv2: 穏やかな笑顔
+    2:{bg:'#E1F5EE',st:'#1a7a50',
+       eyes:'<circle cx="7.5" cy="8.5" r="1.1" fill="#1a7a50"/><circle cx="12.5" cy="8.5" r="1.1" fill="#1a7a50"/>',
+       mouth:'M7 13.5 Q10 16.5 13 13.5'},
+    // Lv3: 無表情
+    3:{bg:'#F4F4F2',st:'#4a4a4a',
+       eyes:'<circle cx="7.5" cy="8.5" r="1.1" fill="#4a4a4a"/><circle cx="12.5" cy="8.5" r="1.1" fill="#4a4a4a"/>',
+       mouth:'M7.5 14 L12.5 14'},
+    // Lv4: 困り顔（最もネガティブ）
+    4:{bg:'#FAECE7',st:'#993C1D',
+       eyes:'<circle cx="7.5" cy="8.5" r="1.1" fill="#993C1D"/><circle cx="12.5" cy="8.5" r="1.1" fill="#993C1D"/>',
+       mouth:'M7 15.5 Q10 11.5 13 15.5'},
   }[level];
-  return `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="${c.bg}" stroke="${c.st}" stroke-width="1.3"/><circle cx="7.5" cy="8.5" r="1.1" fill="${c.st}"/><circle cx="12.5" cy="8.5" r="1.1" fill="${c.st}"/><path d="${c.mouth}" stroke="${c.st}" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="${c.bg}" stroke="${c.st}" stroke-width="1.3"/>${c.eyes}<path d="${c.mouth}" stroke="${c.st}" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`;
 }
 function buildFaceLegend(id){
   const el=document.getElementById(id);if(!el||el.children.length>0)return;
@@ -1031,15 +1043,18 @@ function buildFaceLegend(id){
 }
 
 // ===== STARS =====
+// 尺度は1=最高・4=最低のため、点灯数を (5-score) にして星が多いほどポジティブに表示
 function makeStars(score,color){
+  const lit = 5 - score; // score=1 → ★4点灯、score=4 → ★1点灯
   let h='<div class="stars-wrap">';
-  for(let i=1;i<=4;i++) h+=`<span class="${i<=score?'star-on':'star-off'}" style="${i<=score?'color:'+color:''}"}>★</span>`;
+  for(let i=1;i<=4;i++) h+=`<span class="${i<=lit?'star-on':'star-off'}" style="${i<=lit?'color:'+color:''}"}>★</span>`;
   return h+'</div>';
 }
 function compareLabel(score,avg){
-  const d=avg-score;
-  if(d>0.3)return'<span class="compare-pill compare-high">学部平均より高い</span>';
-  if(d<-0.3)return'<span class="compare-pill compare-low">学部平均より低い</span>';
+  // score・avgともに1=最高・4=最低。scoreの方が小さい(=実施頻度が高い)ほどポジティブ
+  const d=score-avg;
+  if(d<-0.3)return'<span class="compare-pill compare-high">学部平均より高い</span>';
+  if(d>0.3)return'<span class="compare-pill compare-low">学部平均より低い</span>';
   return'<span class="compare-pill compare-same">学部平均と同程度</span>';
 }
 
@@ -1145,16 +1160,42 @@ function initCharts(tab){
 
 function initAbility(){
   // Q5
-  const q5=[{qNum:'Q5-A',text:'授業中に質問した',score:2,avg:2.1},{qNum:'Q5-B',text:'自分の意見を論理的に主張した',score:2,avg:2.3},{qNum:'Q5-C',text:'科学的研究の記事や論文を読んだ',score:3,avg:3.1},{qNum:'Q5-D',text:'自発的に作文の練習をした',score:3,avg:3.2},{qNum:'Q5-E',text:'インターネット上の情報が事実かどうか確認した',score:2,avg:2.4},{qNum:'Q5-F',text:'授業以外に興味のあることを自分で勉強した',score:2,avg:2.2},{qNum:'Q5-G',text:'困難なことにあえて挑戦した',score:2,avg:2.3},{qNum:'Q5-H',text:'読書をした（マンガ・雑誌を除く）',score:2,avg:2.5}];
+  const q5=[
+    {qNum:'Q5-A',text:'授業中に質問した',score:3,avg:2.8},
+    {qNum:'Q5-B',text:'自分の意見を論理的に主張した',score:3,avg:2.9},
+    {qNum:'Q5-C',text:'科学的研究の記事や論文を読んだ',score:4,avg:3.2},
+    {qNum:'Q5-D',text:'自発的に作文の練習をした',score:4,avg:3.4},
+    {qNum:'Q5-E',text:'インターネット上の情報が事実かどうか確認した',score:2,avg:2.5},
+    {qNum:'Q5-F',text:'授業以外に興味のあることを自分で勉強した',score:2,avg:2.4},
+    {qNum:'Q5-G',text:'困難なことにあえて挑戦した',score:2,avg:2.3},
+    {qNum:'Q5-H',text:'読書をした（マンガ・雑誌を除く）',score:3,avg:3.0},
+  ];
   const st=['','ひんぱんにした','ときどきした','あまりしなかった','まったくしなかった'];
   const q5el=document.getElementById('q5-list');
   q5.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q5el.appendChild(row);});
 
   // Q8
-  const q8=[{qNum:'Q8-A',text:'自身の長所と短所について深く理解し、強みの部分を発揮する',score:2,avg:2.3},{qNum:'Q8-B',text:'自己の成長課題を定め、達成のための行動をとる',score:2,avg:2.1},{qNum:'Q8-C',text:'自らの行動を自分で決める',score:3,avg:2.8},{qNum:'Q8-D',text:'多様な情報源から複数の信頼できる情報を集める',score:2,avg:2.2},{qNum:'Q8-E',text:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',score:2,avg:2.0},{qNum:'Q8-F',text:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',score:2,avg:2.1},{qNum:'Q8-G',text:'得られた情報や他の人の意見の根拠・論拠について検討する',score:2,avg:2.3},{qNum:'Q8-H',text:'さまざまな事柄について倫理的な観点から検討する',score:3,avg:2.6},{qNum:'Q8-I',text:'自分とは異なる価値観や社会的・文化的背景を学ぶ',score:2,avg:2.1},{qNum:'Q8-J',text:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',score:2,avg:2.2},{qNum:'Q8-K',text:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',score:3,avg:2.7},{qNum:'Q8-L',text:'他の人と協力して物事に取り組む',score:3,avg:2.8},{qNum:'Q8-M',text:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',score:2,avg:2.1},{qNum:'Q8-N',text:'地域の環境・社会・人の問題に関心を持つ',score:2,avg:2.0},{qNum:'Q8-O',text:'日本以外の国やグローバル社会の問題に関心を持つ',score:2,avg:2.1},{qNum:'Q8-P',text:'社会問題に関心を持つ',score:2,avg:2.2}];
+  const q8=[
+    {qNum:'Q8-A',text:'自身の長所と短所について深く理解し、強みの部分を発揮する',score:2,avg:2.4},
+    {qNum:'Q8-B',text:'自己の成長課題を定め、達成のための行動をとる',score:3,avg:2.8},
+    {qNum:'Q8-C',text:'自らの行動を自分で決める',score:1,avg:2.1},
+    {qNum:'Q8-D',text:'多様な情報源から複数の信頼できる情報を集める',score:3,avg:2.9},
+    {qNum:'Q8-E',text:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',score:3,avg:3.0},
+    {qNum:'Q8-F',text:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',score:2,avg:2.5},
+    {qNum:'Q8-G',text:'得られた情報や他の人の意見の根拠・論拠について検討する',score:3,avg:2.9},
+    {qNum:'Q8-H',text:'さまざまな事柄について倫理的な観点から検討する',score:2,avg:2.6},
+    {qNum:'Q8-I',text:'自分とは異なる価値観や社会的・文化的背景を学ぶ',score:2,avg:2.3},
+    {qNum:'Q8-J',text:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',score:2,avg:2.4},
+    {qNum:'Q8-K',text:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',score:1,avg:2.0},
+    {qNum:'Q8-L',text:'他の人と協力して物事に取り組む',score:1,avg:2.1},
+    {qNum:'Q8-M',text:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',score:2,avg:2.4},
+    {qNum:'Q8-N',text:'地域の環境・社会・人の問題に関心を持つ',score:4,avg:3.1},
+    {qNum:'Q8-O',text:'日本以外の国やグローバル社会の問題に関心を持つ',score:3,avg:3.0},
+    {qNum:'Q8-P',text:'社会問題に関心を持つ',score:2,avg:2.5},
+  ];
   const st8=['','いつも','かなり','少し','めったに/全くしない'];
   const q8el=document.getElementById('q8-list');
-  q8.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-scale-note">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st8[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q8el.appendChild(row);});
+  q8.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-scale-note">回答尺度：★★★★＝いつも　★★★☆＝かなり　★★☆☆＝少し　★☆☆☆＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st8[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q8el.appendChild(row);});
 
   // Q9 snap
   buildFaceLegend('face-legend-snap');
@@ -1206,30 +1247,30 @@ function initBS3(){
   const yl=['1年次','2年次','3年次','4年次'];
   const cats=[
     {name:'自己理解・主体性',color:'#378ADD',items:[
-      {qNum:'Q9-A',fullText:'自身の長所と短所について深く理解し、強みの部分を発揮する',scores:[2,2,3,3],avg:[2.1,2.3,2.5,2.6]},
-      {qNum:'Q9-B',fullText:'自己の成長課題を定め、達成のための行動をとる',scores:[1,2,3,3],avg:[2.0,2.1,2.3,2.4]},
-      {qNum:'Q9-C',fullText:'自らの行動を自分で決める',scores:[2,3,3,4],avg:[2.5,2.8,2.9,3.0]},
+      {qNum:'Q9-A',fullText:'自身の長所と短所について深く理解し、強みの部分を発揮する',scores:[3,2,2,2],avg:[2.5,2.6,2.7,2.8]},
+      {qNum:'Q9-B',fullText:'自己の成長課題を定め、達成のための行動をとる',scores:[3,3,2,2],avg:[2.6,2.7,2.8,2.9]},
+      {qNum:'Q9-C',fullText:'自らの行動を自分で決める',scores:[2,1,1,1],avg:[2.3,2.4,2.5,2.6]},
     ]},
     {name:'情報収集・論理的思考',color:'#7F77DD',items:[
-      {qNum:'Q9-D',fullText:'多様な情報源から複数の信頼できる情報を集める',scores:[1,2,2,3],avg:[2.0,2.2,2.4,2.5]},
-      {qNum:'Q9-E',fullText:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',scores:[1,2,2,3],avg:[1.9,2.0,2.2,2.3]},
-      {qNum:'Q9-F',fullText:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',scores:[2,2,3,3],avg:[2.0,2.1,2.3,2.4]},
-      {qNum:'Q9-G',fullText:'得られた情報や他の人の意見の根拠・論拠について検討する',scores:[2,2,2,3],avg:[2.1,2.3,2.5,2.6]},
+      {qNum:'Q9-D',fullText:'多様な情報源から複数の信頼できる情報を集める',scores:[3,3,2,2],avg:[2.7,2.8,2.9,3.0]},
+      {qNum:'Q9-E',fullText:'自ら集めたデータや情報を適切に分析し、結果について論理的に正しく解釈する',scores:[4,3,3,2],avg:[2.9,3.0,3.1,3.2]},
+      {qNum:'Q9-F',fullText:'改善すべき、あるいは解決すべき問題の本質を理解し、解決に向けた創意工夫のある行動をとる',scores:[3,3,2,2],avg:[2.6,2.7,2.8,2.9]},
+      {qNum:'Q9-G',fullText:'得られた情報や他の人の意見の根拠・論拠について検討する',scores:[3,2,2,2],avg:[2.5,2.6,2.7,2.8]},
     ]},
     {name:'倫理観・多様性',color:'#D85A30',items:[
-      {qNum:'Q9-H',fullText:'さまざまな事柄について倫理的な観点から検討する',scores:[2,3,3,3],avg:[2.4,2.6,2.7,2.8]},
-      {qNum:'Q9-I',fullText:'自分とは異なる価値観や社会的・文化的背景を学ぶ',scores:[2,2,3,3],avg:[2.1,2.2,2.3,2.4]},
-      {qNum:'Q9-J',fullText:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',scores:[1,2,2,3],avg:[2.0,2.2,2.4,2.5]},
+      {qNum:'Q9-H',fullText:'さまざまな事柄について倫理的な観点から検討する',scores:[2,2,2,1],avg:[2.3,2.5,2.6,2.7]},
+      {qNum:'Q9-I',fullText:'自分とは異なる価値観や社会的・文化的背景を学ぶ',scores:[2,2,1,1],avg:[2.2,2.3,2.4,2.5]},
+      {qNum:'Q9-J',fullText:'身の回りの環境に加え、地球全体の異なる環境について、その多様性を理解する',scores:[2,2,2,1],avg:[2.4,2.5,2.6,2.7]},
     ]},
     {name:'協働・コミュニケーション',color:'#1D9E75',items:[
-      {qNum:'Q9-K',fullText:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',scores:[2,3,3,4],avg:[2.5,2.7,2.8,2.9]},
-      {qNum:'Q9-L',fullText:'他の人と協力して物事に取り組む',scores:[3,3,3,4],avg:[2.6,2.8,2.9,3.0]},
-      {qNum:'Q9-M',fullText:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',scores:[2,2,3,3],avg:[2.0,2.1,2.3,2.4]},
+      {qNum:'Q9-K',fullText:'自らの役割・仕事・課題は何かを認識しており、それに責任を持って取り組む',scores:[2,2,1,1],avg:[2.3,2.4,2.5,2.6]},
+      {qNum:'Q9-L',fullText:'他の人と協力して物事に取り組む',scores:[1,1,1,1],avg:[2.0,2.1,2.2,2.3]},
+      {qNum:'Q9-M',fullText:'ある事柄について他者と建設的に意見を交換し、話し合ったり議論したりする',scores:[3,2,2,2],avg:[2.5,2.6,2.7,2.8]},
     ]},
     {name:'社会・地域への関心',color:'#BA7517',items:[
-      {qNum:'Q9-N',fullText:'地域の環境・社会・人の問題に関心を持つ',scores:[1,2,2,3],avg:[1.9,2.0,2.1,2.3]},
-      {qNum:'Q9-O',fullText:'日本以外の国やグローバル社会の問題に関心を持つ',scores:[2,2,3,3],avg:[2.0,2.1,2.2,2.4]},
-      {qNum:'Q9-P',fullText:'社会問題に関心を持つ',scores:[2,2,2,3],avg:[2.1,2.2,2.3,2.5]},
+      {qNum:'Q9-N',fullText:'地域の環境・社会・人の問題に関心を持つ',scores:[2,2,2,1],avg:[2.3,2.4,2.5,2.6]},
+      {qNum:'Q9-O',fullText:'日本以外の国やグローバル社会の問題に関心を持つ',scores:[4,3,3,2],avg:[3.0,3.1,3.1,3.2]},
+      {qNum:'Q9-P',fullText:'社会問題に関心を持つ',scores:[3,2,2,2],avg:[2.5,2.6,2.7,2.8]},
     ]},
   ];
   function cs(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+it.scores[yi],0);return parseFloat((s/cat.items.length).toFixed(2));});}
@@ -1243,21 +1284,20 @@ function initBS3(){
     const diffText=diff>0?`▲${diff}`:diff<0?`▼${Math.abs(diff)}`:'－';
     const block=document.createElement('div');block.className='cat-block';
     const header=document.createElement('div');header.className='cat-header';
-    header.innerHTML=`<div class="cat-left"><div style="width:12px;height:12px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div><span class="cat-title">${cat.name}</span><span class="score-badge ${diff>0?'badge-up':'badge-same'}">${latest.toFixed(1)}点 ${diffText}</span></div><span class="cat-arrow ${ci===0?'open':''}">▼</span>`;
-    const body=document.createElement('div');body.className=`cat-body${ci===0?' open':''}`;
+    header.innerHTML=`<div class="cat-left"><div style="width:12px;height:12px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div><span class="cat-title">${cat.name}</span><span class="score-badge ${diff>0?'badge-up':'badge-same'}">${latest.toFixed(1)}点 ${diffText}</span></div><span class="cat-arrow">▼</span>`;
+    const body=document.createElement('div');body.className='cat-body';
     const ca_area=document.createElement('div');ca_area.className='cat-chart-area';
     ca_area.innerHTML=`<div class="cat-chart-title">このカテゴリのスコア推移（4点満点）</div><div style="position:relative;height:140px;"><canvas id="cat-chart-${ci}" role="img" aria-label="${cat.name}の推移"></canvas></div><div style="display:flex;gap:14px;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--border);"><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:2px;background:${cat.color};display:inline-block;border-radius:1px;"></span>あなた</span><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:0;border-top:1.5px dashed ${cat.color};display:inline-block;"></span>学部平均</span></div>`;
     const ql=document.createElement('div');ql.className='q-list';
     cat.items.forEach(item=>{
       const ls=item.scores[item.scores.length-1],la=item.avg[item.avg.length-1];
       const row=document.createElement('div');row.className='q-row';
-      row.innerHTML=`<div class="q-tag">学修状況報告（学部生）${item.qNum}</div><div class="q-full-text">${item.fullText}</div><div class="q-scale-note">回答尺度：★1＝いつも　★2＝かなり　★3＝少し　★4＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた（今年度）</span>${makeStars(ls,cat.color)}<span style="font-size:12px;font-weight:700;color:${cat.color};margin-left:4px;">${sl[ls]}</span></div><div class="q-result-row"><span class="q-result-label">学部平均</span><span class="q-avg-text">${la.toFixed(1)}点（4点満点）</span></div>`;
+      row.innerHTML=`<div class="q-tag">学修状況報告（学部生）${item.qNum}</div><div class="q-full-text">${item.fullText}</div><div class="q-scale-note">回答尺度：★★★★＝いつも　★★★☆＝かなり　★★☆☆＝少し　★☆☆☆＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた（今年度）</span>${makeStars(ls,cat.color)}<span style="font-size:12px;font-weight:700;color:${cat.color};margin-left:4px;">${sl[ls]}</span></div><div class="q-result-row"><span class="q-result-label">学部平均</span><span class="q-avg-text">${la.toFixed(1)}点（4点満点）</span></div>`;
       ql.appendChild(row);
     });
     body.appendChild(ca_area);body.appendChild(ql);
     header.onclick=()=>{const arrow=header.querySelector('.cat-arrow');const isOpen=body.classList.contains('open');body.classList.toggle('open',!isOpen);arrow.classList.toggle('open',!isOpen);if(!isOpen&&!catCharts[ci])setTimeout(()=>buildCatChart(ci,cat,scores,avgs,yl),50);};
     block.appendChild(header);block.appendChild(body);cont.appendChild(block);
-    if(ci===0)setTimeout(()=>buildCatChart(ci,cat,scores,avgs,yl),200);
   });
 }
 
@@ -1484,8 +1524,7 @@ function buildQ6Table() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded',()=>{
-  initAbility();
-  bsInited['bs-1']=true;
+  // 全セクション折りたたみ状態で開始（クリックで展開）
 });
 </script>
 </body>
