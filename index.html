@@ -682,8 +682,7 @@ body {
       <div class="card">
         <div class="q-tag">学修状況報告（新入生）Q9A〜H</div>
         <div class="card-title">入学時の気持ち</div>
-        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:10px;">回答尺度：あてはまる → あてはまらない（4段階）</div>
-        <div class="face-legend" id="face-legend-snap"></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:14px;">あてはまる → あてはまらない（4段階）｜左：あなたの回答　右：学部で最も多かった回答</div>
         <table class="face-table" id="q9-snap-table"></table>
       </div>
     </div>
@@ -756,7 +755,7 @@ body {
     </div>
     <div class="big-section-body" id="bs-3-body">
       <div style="height:16px;"></div>
-      <div class="source-note">出典：<strong>学修状況報告（学部生）</strong> Q9「あなたは普段、次の項目をどの程度行いますか」 ／ 毎年度末（3月）実施<br>回答尺度：1＝いつも　2＝かなり　3＝少し　4＝めったに/全くしない（スコアは高いほど実施頻度が高い）</div>
+      <div class="source-note">出典：<strong>学修状況報告（学部生）</strong> Q9「あなたは普段、次の項目をどの程度行いますか」 ／ 毎年度末（3月）実施<br>グラフの値はスコアを変換して表示しています（★4＝いつも行う　★1＝めったに行わない）</div>
       <div id="growth-cats"></div>
     </div>
   </div>
@@ -955,8 +954,8 @@ body {
   <p class="section-sub">各学期末に9つの観点について自己評価を行います。レベル1〜5で評価し、レベル4が卒業要件を満たす目安です。自分の成長の軌跡を確認しましょう。</p>
 
   <div class="card">
-    <div class="card-title">能力の成長推移（学期別・4点満点）</div>
-    <div class="card-sub">各観点のレベルが学期ごとにどう変化したかを表示　赤横線 = レベル4（卒業要件の目安）　赤丸 = コース平均</div>
+    <div class="card-title">能力の成長推移（学期別・5点満点）</div>
+    <div class="card-sub">各観点のレベルが学期ごとにどう変化したかを表示　赤横線 = レベル4（卒業要件の目安）</div>
 
     <div class="rubric-legend">
       <div class="rubric-legend-item">
@@ -1131,12 +1130,15 @@ function buildHeatmap(tableId,data,futureFrom){
 let catCharts={};
 function buildCatChart(ci,cat,scores,avgs,yl){
   const canvas=document.getElementById(`cat-chart-${ci}`);if(!canvas||catCharts[ci])return;
+  const lvLabel=['','めったに','少し','かなり','いつも'];
   catCharts[ci]=new Chart(canvas,{
     type:'line',data:{labels:yl,datasets:[
       {label:'あなた',data:scores,borderColor:cat.color,backgroundColor:cat.color+'18',pointBackgroundColor:cat.color,pointRadius:5,borderWidth:2.5,tension:0.3,fill:true},
       {label:'学部平均',data:avgs,borderColor:cat.color,borderWidth:1.5,borderDash:[5,4],pointRadius:0,tension:0.3,fill:false}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}点`}}},scales:{y:{min:1,max:4,ticks:{stepSize:1,font:{size:9},callback:v=>v+'点'},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${lvLabel[Math.round(ctx.parsed.y)]||ctx.parsed.y.toFixed(1)}`}}},
+      scales:{y:{min:1,max:4,ticks:{stepSize:1,font:{size:9},callback:v=>lvLabel[v]||v},grid:{color:'rgba(0,0,0,0.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}
   });
 }
 
@@ -1197,22 +1199,40 @@ function initAbility(){
   const q8el=document.getElementById('q8-list');
   q8.forEach(item=>{const row=document.createElement('div');row.className='q-row';row.innerHTML=`<div class="q-tag">学修状況報告（新入生）${item.qNum}</div><div class="q-full-text">${item.text}</div><div class="q-scale-note">回答尺度：★★★★＝いつも　★★★☆＝かなり　★★☆☆＝少し　★☆☆☆＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた</span>${makeStars(item.score,'#1D9E75')}<span style="font-size:12px;font-weight:700;color:#0a6b4d;margin-left:4px;">${st8[item.score]}</span>${compareLabel(item.score,item.avg)}</div>`;q8el.appendChild(row);});
 
-  // Q9 snap
-  buildFaceLegend('face-legend-snap');
-  const q9s=[{qNum:'Q9-A',text:'大学で学ぶことが楽しみだ',score:1,maj:1},{qNum:'Q9-B',text:'入学できてほっとしている',score:1,maj:1},{qNum:'Q9-C',text:'長崎大学に入学できて満足している',score:1,maj:1},{qNum:'Q9-D',text:'大学でうまくやっていく自信がある',score:2,maj:2},{qNum:'Q9-E',text:'大学の授業についていけるか心配だ',score:3,maj:2},{qNum:'Q9-F',text:'友だちができるか心配だ',score:2,maj:3},{qNum:'Q9-G',text:'一人暮らしが不安だ',score:3,maj:3},{qNum:'Q9-H',text:'お金のことが心配だ',score:2,maj:3}];
-  const faceLabels={1:'あてはまる',2:'どちらかといえばあてはまる',3:'どちらかといえばあてはまらない',4:'あてはまらない'};
+  // Q9 snap — 自分の回答と学部多数の2個並列表示（Q17スタイルに統一）
+  const q9s=[
+    {qNum:'Q9-A',text:'大学で学ぶことが楽しみだ',score:1,maj:1},
+    {qNum:'Q9-B',text:'入学できてほっとしている',score:1,maj:1},
+    {qNum:'Q9-C',text:'長崎大学に入学できて満足している',score:1,maj:1},
+    {qNum:'Q9-D',text:'大学でうまくやっていく自信がある',score:2,maj:2},
+    {qNum:'Q9-E',text:'大学の授業についていけるか心配だ',score:3,maj:2},
+    {qNum:'Q9-F',text:'友だちができるか心配だ',score:2,maj:3},
+    {qNum:'Q9-G',text:'一人暮らしが不安だ',score:3,maj:3},
+    {qNum:'Q9-H',text:'お金のことが心配だ',score:2,maj:3},
+  ];
+  const faceLabels={1:'あてはまる',2:'どちらかといえば\nあてはまる',3:'どちらかといえば\nあてはまらない',4:'あてはまらない'};
   const tbl=document.getElementById('q9-snap-table');
-  const th=document.createElement('thead');const hr=document.createElement('tr');
+  const th=document.createElement('thead');
+  const hr=document.createElement('tr');
   hr.innerHTML='<th class="q-col">設問</th>';
-  [1,2,3,4].forEach(lv=>{hr.innerHTML+=`<th style="width:54px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;">${makeFace(lv,24)}<div style="font-size:7px;color:var(--text-tertiary);line-height:1.2;max-width:50px;">${faceLabels[lv]}</div></div></th>`;});
-  hr.innerHTML+='<th style="font-size:10px;color:var(--text-secondary);padding-left:8px;text-align:left;font-weight:700;">学部で<br>最も多かった回答</th>';
+  hr.innerHTML+='<th style="width:80px;text-align:center;font-size:10px;color:var(--text-secondary);">あなたの回答</th>';
+  hr.innerHTML+='<th style="width:80px;text-align:center;font-size:10px;color:var(--text-secondary);">学部で最も多かった回答</th>';
   th.appendChild(hr);tbl.appendChild(th);
   const tb=document.createElement('tbody');
   q9s.forEach(item=>{
-    const tr=document.createElement('tr');const tdQ=document.createElement('td');tdQ.className='q-col';
-    tdQ.innerHTML=`<div class="q-tag">${item.qNum}</div><div style="font-size:12px;color:var(--text);line-height:1.6;">${item.text}</div>`;tr.appendChild(tdQ);
-    [1,2,3,4].forEach(lv=>{const td=document.createElement('td');td.className='face-col';const w=document.createElement('div');w.style.cssText=`display:flex;align-items:center;justify-content:center;opacity:${item.score===lv?1:0.12};`;w.innerHTML=makeFace(lv,24);td.appendChild(w);tr.appendChild(td);});
-    const tdA=document.createElement('td');tdA.style.cssText='padding-left:10px;vertical-align:middle;';tdA.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">${makeFace(item.maj,24)}<div style="font-size:9px;color:var(--text-tertiary);">学部多数</div></div>`;tr.appendChild(tdA);tb.appendChild(tr);
+    const tr=document.createElement('tr');
+    const tdQ=document.createElement('td');tdQ.className='q-col';
+    tdQ.innerHTML=`<div class="q-tag">${item.qNum}</div><div style="font-size:12px;color:var(--text);line-height:1.6;">${item.text}</div>`;
+    tr.appendChild(tdQ);
+    // 自分の回答
+    const tdS=document.createElement('td');tdS.className='face-col';
+    tdS.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">${makeFace(item.score,30)}<div style="font-size:9px;color:var(--text-secondary);text-align:center;line-height:1.3;max-width:68px;">${faceLabels[item.score].replace(/\n/g,'<br>')}</div></div>`;
+    tr.appendChild(tdS);
+    // 学部多数
+    const tdA=document.createElement('td');tdA.className='face-col';
+    tdA.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">${makeFace(item.maj,30)}<div style="font-size:9px;color:var(--text-tertiary);text-align:center;line-height:1.3;max-width:68px;">${faceLabels[item.maj].replace(/\n/g,'<br>')}</div></div>`;
+    tr.appendChild(tdA);
+    tb.appendChild(tr);
   });
   tbl.appendChild(tb);
   bsInited['bs-1']=true;
@@ -1273,9 +1293,10 @@ function initBS3(){
       {qNum:'Q9-P',fullText:'社会問題に関心を持つ',scores:[3,2,2,2],avg:[2.5,2.6,2.7,2.8]},
     ]},
   ];
-  function cs(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+it.scores[yi],0);return parseFloat((s/cat.items.length).toFixed(2));});}
-  function ca(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+it.avg[yi],0);return parseFloat((s/cat.items.length).toFixed(2));});}
-  const sl=['','いつも','かなり','少し','めったに/全くしない'];
+  // 生スコア(1=いつも/4=めったに)を表示用(1=めったに/4=いつも)に反転
+  function cs(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+(5-it.scores[yi]),0);return parseFloat((s/cat.items.length).toFixed(2));});}
+  function ca(cat){return yl.map((_,yi)=>{const s=cat.items.reduce((a,it)=>a+(5-it.avg[yi]),0);return parseFloat((s/cat.items.length).toFixed(2));});}
+  const sl=['','めったに/全くしない','少し','かなり','いつも']; // 表示用ラベル（反転後のscoreに対応）
   const cont=document.getElementById('growth-cats');
   cats.forEach((cat,ci)=>{
     const scores=cs(cat),avgs=ca(cat);
@@ -1287,12 +1308,15 @@ function initBS3(){
     header.innerHTML=`<div class="cat-left"><div style="width:12px;height:12px;border-radius:50%;background:${cat.color};flex-shrink:0;"></div><span class="cat-title">${cat.name}</span><span class="score-badge ${diff>0?'badge-up':'badge-same'}">${latest.toFixed(1)}点 ${diffText}</span></div><span class="cat-arrow">▼</span>`;
     const body=document.createElement('div');body.className='cat-body';
     const ca_area=document.createElement('div');ca_area.className='cat-chart-area';
-    ca_area.innerHTML=`<div class="cat-chart-title">このカテゴリのスコア推移（4点満点）</div><div style="position:relative;height:140px;"><canvas id="cat-chart-${ci}" role="img" aria-label="${cat.name}の推移"></canvas></div><div style="display:flex;gap:14px;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--border);"><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:2px;background:${cat.color};display:inline-block;border-radius:1px;"></span>あなた</span><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:0;border-top:1.5px dashed ${cat.color};display:inline-block;"></span>学部平均</span></div>`;
+    ca_area.innerHTML=`<div class="cat-chart-title">このカテゴリのスコア推移（4＝いつも行う）</div><div style="position:relative;height:140px;"><canvas id="cat-chart-${ci}" role="img" aria-label="${cat.name}の推移"></canvas></div><div style="display:flex;gap:14px;margin-top:8px;padding-bottom:12px;border-bottom:1px solid var(--border);"><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:2px;background:${cat.color};display:inline-block;border-radius:1px;"></span>あなた</span><span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-secondary);"><span style="width:16px;height:0;border-top:1.5px dashed ${cat.color};display:inline-block;"></span>学部平均</span></div>`;
     const ql=document.createElement('div');ql.className='q-list';
     cat.items.forEach(item=>{
-      const ls=item.scores[item.scores.length-1],la=item.avg[item.avg.length-1];
+      const ls=item.scores[item.scores.length-1];  // 生スコア
+      const la=item.avg[item.avg.length-1];         // 生平均
+      const lsDisp=5-ls;  // 表示用（高い=ポジティブ）
+      const laDisp=parseFloat((5-la).toFixed(1));
       const row=document.createElement('div');row.className='q-row';
-      row.innerHTML=`<div class="q-tag">学修状況報告（学部生）${item.qNum}</div><div class="q-full-text">${item.fullText}</div><div class="q-scale-note">回答尺度：★★★★＝いつも　★★★☆＝かなり　★★☆☆＝少し　★☆☆☆＝めったに/全くしない</div><div class="q-result-row"><span class="q-result-label">あなた（今年度）</span>${makeStars(ls,cat.color)}<span style="font-size:12px;font-weight:700;color:${cat.color};margin-left:4px;">${sl[ls]}</span></div><div class="q-result-row"><span class="q-result-label">学部平均</span><span class="q-avg-text">${la.toFixed(1)}点（4点満点）</span></div>`;
+      row.innerHTML=`<div class="q-tag">学修状況報告（学部生）${item.qNum}</div><div class="q-full-text">${item.fullText}</div><div class="q-scale-note">★★★★＝いつも行う　★★★☆＝かなり行う　★★☆☆＝少し行う　★☆☆☆＝めったに行わない</div><div class="q-result-row"><span class="q-result-label">あなた（今年度）</span>${makeStars(ls,cat.color)}<span style="font-size:12px;font-weight:700;color:${cat.color};margin-left:4px;">${sl[ls]}</span></div><div class="q-result-row"><span class="q-result-label">学部平均</span><span class="q-avg-text">${laDisp.toFixed(1)}（4点満点）</span></div>`;
       ql.appendChild(row);
     });
     body.appendChild(ca_area);body.appendChild(ql);
@@ -1312,21 +1336,6 @@ function initBS4(){
   buildHeatmap('hm-avg',hmA,8);
 }
 
-function initBS5(){
-  const rubricItems=[
-    {label:'主体性',scores:[1,2,2,3,2,3,3,4],avg:2.5},{label:'情報リテラシー',scores:[1,2,3,3,2,3,4,4],avg:2.7},{label:'論理的組立て',scores:[1,1,2,2,3,3,3,3],avg:2.4},{label:'批判的検討',scores:[1,1,2,2,2,3,3,3],avg:2.3},{label:'倫理観',scores:[2,2,3,3,3,3,3,4],avg:2.8},{label:'多様性の理解',scores:[1,2,2,2,3,3,3,3],avg:2.5},{label:'協働性',scores:[2,2,3,3,3,4,4,4],avg:2.9},{label:'考えをやりとりする力',scores:[1,2,2,3,3,3,3,4],avg:2.6},{label:'国際・地域社会への関心',scores:[1,1,2,2,2,3,3,3],avg:2.4},
-  ];
-  const rubricTerms=['1前','1後','2前','2後','3前','3後','4前','4後'];
-  const el=document.getElementById('rubric-list');
-  rubricItems.forEach(item=>{
-    const row=document.createElement('div');row.className='rubric-row';
-    const avgPct=(item.avg/5)*100;
-    let bars='';
-    item.scores.forEach((s,i)=>{const pct=(s/5)*100;const isLatest=i===item.scores.length-1;bars+=`<div title="${rubricTerms[i]}: ${s}点" style="flex:1;height:100%;background:${isLatest?'#1D9E75':'#9FE1CB'};opacity:${isLatest?1:0.65};border-right:1px solid #fff;"></div>`;});
-    row.innerHTML=`<div class="rubric-label">${item.label}</div><div class="rubric-track"><div style="display:flex;height:100%;">${bars}</div><div style="position:absolute;top:0;left:${avgPct}%;width:2px;height:100%;background:#E24B4A;opacity:0.85;"></div></div><div class="rubric-val">${item.scores[item.scores.length-1]}</div>`;
-    el.appendChild(row);
-  });
-}
 
 function initFuture(){
   buildTimeline('q19-tl',[{year:'1年',yearLabel:'1年次末',text:'公務員（土木職）として長崎市の都市計画に携わりたいと思っています。'},{year:'2年',yearLabel:'2年次末',text:'公務員（土木職）の志望は変わりません。インターンシップで実際の業務を体験したいと思っています。'},{year:'3年',yearLabel:'3年次末',text:'北海道庁でインターンシップを経験し、公務員の仕事に確信が持てました。引き続き公務員試験に向けて準備を進めます。'},{year:'4年',yearLabel:'4年次末',text:null}]);
@@ -1379,7 +1388,9 @@ function initRubric() {
 
   const MAX = 5;
   const CELL_H = 80;
-  const LV4_PCT = (4 / MAX) * 100; // 80%
+  // 1スタートスケール: Lv1=底(0%)、Lv5=天井(100%)
+  const pctOf = v => ((v - 1) / (MAX - 1)) * 100;
+  const LV4_PCT = pctOf(4); // 75%
 
   const tbl = document.createElement('table');
   tbl.className = 'rubric-grid-table';
@@ -1421,8 +1432,8 @@ function initRubric() {
     const axisDiv = document.createElement('div');
     axisDiv.className = 'rubric-yaxis-inner';
     axisDiv.style.height = CELL_H + 'px';
-    // tick labels: 4, 2, 0 (only 0,2,4 as in 図1)
-    [[4, LV4_PCT], [2, (2/MAX)*100], [0, 0]].forEach(([v, pct]) => {
+    // tick labels: 5, 4, 3, 2, 1 （0は表示しない・1スタート）
+    [[5,pctOf(5)],[4,pctOf(4)],[3,pctOf(3)],[2,pctOf(2)],[1,pctOf(1)]].forEach(([v,pct])=>{
       const tick = document.createElement('div');
       tick.className = 'rubric-ytick-label';
       tick.textContent = v;
@@ -1450,11 +1461,11 @@ function initRubric() {
       lv4.style.bottom = LV4_PCT + '%';
       inner.appendChild(lv4);
 
-      // Bar: full cell width, height = score/5
+      // Bar: full cell width, Lv1=最小、Lv5=最大（1スタートスケール）
       if (!isFuture && score !== null) {
         const bar = document.createElement('div');
         bar.className = 'rubric-bar-col';
-        bar.style.height = ((score / MAX) * 100) + '%';
+        bar.style.height = pctOf(score) + '%';
         inner.appendChild(bar);
       }
 
