@@ -367,7 +367,39 @@ body {
 .time-table td.future-cell { text-align:center; color:#ccc; font-style:italic; }
 .time-table tr:last-child td { border-bottom:none; }
 
-/* ===== RUBRIC CHART GRID (図1スタイル) ===== */
+/* ===== MYWAY TAB ===== */
+.myway-ctrl-bar { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 16px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-left:4px solid #3B6D11; }
+.myway-ctrl-label { font-size:11px; font-weight:700; color:var(--text-tertiary); letter-spacing:0.04em; margin-bottom:2px; }
+.myway-ctrl-badge { font-size:11px; font-weight:700; padding:4px 12px; border-radius:10px; background:#eaf3de; color:#27500A; border:1px solid #97C459; white-space:nowrap; }
+.myway-chips { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-bottom:18px; }
+.myway-chip { font-size:11px; font-weight:700; padding:3px 9px; border-radius:16px; background:#e8f0fe; color:#0C447C; border:1px solid #85B7EB; }
+.myway-chip-q { background:#e6f6f1; color:#085041; border-color:#5DCAA5; }
+.myway-chip-r { background:#f0effe; color:#3C3489; border-color:#AFA9EC; }
+.myway-gen-btn { background:var(--blue-dark); color:#fff; border:none; border-radius:8px; padding:12px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font); display:inline-flex; align-items:center; gap:8px; letter-spacing:0.02em; transition:background 0.15s; }
+.myway-gen-btn:hover { background:#0a3d7a; }
+.myway-status { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-secondary); margin-bottom:14px; font-weight:700; }
+.myway-dot { width:7px; height:7px; border-radius:50%; background:#1D9E75; flex-shrink:0; }
+.myway-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 1px 4px rgba(0,0,0,0.06); overflow:hidden; }
+.myway-card-hd { display:flex; align-items:center; gap:10px; padding:14px 18px 12px; border-bottom:1px solid var(--border); border-radius:0; }
+.myway-card-ic { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.myway-card-lbl { font-size:11px; font-weight:700; letter-spacing:0.04em; margin-bottom:2px; }
+.myway-card-ttl { font-size:15px; font-weight:700; color:var(--text); }
+.myway-card-bd { padding:18px 20px; }
+.myway-txt { font-size:14px; color:var(--text); line-height:2.0; letter-spacing:0.01em; }
+.myway-txt .mw-num { display:inline-block; background:#e8f0fe; color:#0C447C; font-weight:700; border-radius:4px; padding:0 5px; font-size:13px; }
+.myway-txt .mw-kw { display:inline-block; background:#e6f6f1; color:#085041; font-weight:700; border-radius:4px; padding:0 5px; font-size:13px; }
+.myway-txt .mw-sep { display:block; height:1px; background:var(--border); margin:14px 0; }
+.myway-card-ft { padding:10px 18px; border-top:1px solid var(--border); display:flex; gap:7px; justify-content:flex-end; }
+.myway-btn-copy { font-size:12px; font-weight:700; padding:6px 14px; border-radius:6px; border:1px solid var(--border-strong); background:var(--bg-card); color:var(--text-secondary); cursor:pointer; font-family:var(--font); }
+.myway-btn-regen { font-size:12px; font-weight:700; padding:6px 14px; border-radius:6px; border:1px solid #85B7EB; background:#e8f0fe; color:var(--blue-dark); cursor:pointer; font-family:var(--font); }
+.myway-pr-wrap { background:var(--blue-dark); border-radius:10px; padding:18px 20px; }
+.myway-pr-lbl { font-size:11px; color:rgba(255,255,255,0.65); font-weight:700; letter-spacing:0.05em; margin-bottom:10px; }
+.myway-pr-txt { font-size:14px; color:#fff; line-height:2.0; letter-spacing:0.01em; }
+.myway-pr-copy { font-size:12px; font-weight:700; padding:6px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.35); background:rgba(255,255,255,0.12); color:#fff; cursor:pointer; font-family:var(--font); }
+.myway-note { font-size:11px; color:var(--text-tertiary); text-align:center; margin-top:20px; line-height:1.8; }
+.myway-spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--blue-dark); border-radius:50%; animation:mwspin 0.8s linear infinite; margin:0 auto; }
+@keyframes mwspin { to { transform:rotate(360deg); } }
+
 .rubric-grid-table { width:100%; border-collapse:collapse; table-layout:fixed; font-size:11px; }
 .rubric-grid-table th { background:#f5f0e8; font-size:11px; font-weight:700; text-align:center; padding:7px 4px; border:1px solid #ccc; color:#333; }
 .rubric-grid-table th.obs-th { text-align:center; width:110px; background:#f5f0e8; }
@@ -415,8 +447,9 @@ body {
   <button class="tab-btn" onclick="switchTab('profile',this)">👤 自己紹介</button>
   <button class="tab-btn" onclick="switchTab('numbers',this)">📊 数字で見る私</button>
   <button class="tab-btn" onclick="switchTab('ability',this)">🌱 能力で見る私</button>
-  <button class="tab-btn" onclick="switchTab('future',this)">🔭 これからの私</button>
+  <button class="tab-btn" onclick="switchTab('future',this)">🔭 将来への記録</button>
   <button class="tab-btn" onclick="switchTab('portfolio',this)">📁 積み上げてきたもの</button>
+  <button class="tab-btn" onclick="switchTab('myway',this)">🪴 これからの自分へ</button>
 </nav>
 
 <main class="main">
@@ -802,7 +835,7 @@ body {
     <div class="section-icon" style="background:var(--purple-light);">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v16M5 7l5-5 5 5" stroke="#534AB7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <div class="section-title">これからの私</div>
+    <div class="section-title">将来への記録</div>
   </div>
   <p class="section-sub">将来への記録と、学期ごとの目標・振り返りをまとめています。過去の自分の言葉を見ながら、これからの自分を考えましょう。</p>
 
@@ -975,6 +1008,158 @@ body {
     <div class="rubric-input-title">📝 自己評価の入力</div>
     <div class="rubric-input-sub">現行システムの入力機能がここに入ります<br>（DP観点ごとの折りたたみ・レベル1〜5のラジオボタン選択・保存）</div>
   </div>
+</div>
+
+<!-- ===== TAB: MYWAY ===== -->
+<div id="tab-myway" class="tab-panel">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eaf3de;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 17V9" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M10 9C10 9 7 7 5 4c3 0 5 2 5 2" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="#C0DD97"/>
+        <path d="M10 12C10 12 13 10 15 7c-3 0-5 2.5-5 2.5" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="#C0DD97"/>
+        <path d="M8 17h4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="section-title">これからの自分へ</div>
+  </div>
+  <p class="section-sub">ポートフォリオに蓄積されたすべての記録をAIが読み解き、あなたの強み・歩み・未来を言葉にします。就職活動の自己分析や、エントリーシートのヒントとしてご活用ください。</p>
+
+  <!-- 管理者制御バー -->
+  <div class="myway-ctrl-bar">
+    <div>
+      <div class="myway-ctrl-label">公開設定（管理者のみ表示）</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:1px;">生成可能時期・使用モデルは管理コンソールで制御します</div>
+    </div>
+    <span class="myway-ctrl-badge">● 3年前期〜 公開中</span>
+  </div>
+
+  <!-- 生成ボックス（管理者運用時は非表示） -->
+  <div class="card" style="text-align:center;padding:24px 20px;display:none;">
+    <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">✦ AI分析レポートを生成する</div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:18px;line-height:1.8;">以下のすべてのデータを参照して、あなただけの分析レポートを作成します<br>生成には30〜60秒ほどかかります</div>
+    <div class="myway-chips">
+      <span class="myway-chip">GPA・単位推移</span>
+      <span class="myway-chip myway-chip-q">入学時の気持ち（Q9）</span>
+      <span class="myway-chip myway-chip-q">高校時代の行動（Q5）</span>
+      <span class="myway-chip myway-chip-q">学生生活の満足度（Q1・Q10・Q11）</span>
+      <span class="myway-chip myway-chip-q">成長の記録 DP軸（Q9A〜P）</span>
+      <span class="myway-chip myway-chip-q">今の気持ち（Q17）</span>
+      <span class="myway-chip myway-chip-r">自己評価ルーブリック</span>
+      <span class="myway-chip myway-chip-r">受講ふり返り</span>
+      <span class="myway-chip">インターンシップ記録</span>
+      <span class="myway-chip">資格・検定</span>
+      <span class="myway-chip">将来の職業志望（Q19）</span>
+      <span class="myway-chip">卒業後にしたいこと（Q18）</span>
+      <span class="myway-chip">目標と振り返り記録</span>
+      <span class="myway-chip">成果物ボックス</span>
+    </div>
+    <button class="myway-gen-btn" onclick="initMyway()">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+      分析レポートを生成する
+    </button>
+  </div>
+
+  <!-- 生成結果エリア（モックでは最初から表示） -->
+  <div id="myway-result" style="display:block;">
+    <div class="myway-status">
+      <div class="myway-dot"></div>
+      <span id="myway-date">2026年4月14日 生成</span>
+      <span style="color:var(--text-tertiary);margin-left:4px;">— このレポートはポートフォリオの全データをもとにAIが生成しました</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- カード1: 歩みと実績 -->
+      <div class="myway-card">
+        <div class="myway-card-hd" style="border-left:4px solid #1D9E75;">
+          <div class="myway-card-ic" style="background:#e6f6f1;">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M2 13l3-4 3 2.5 3-5.5 3 3.5" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="myway-card-lbl" style="color:#0F6E56;">あなたが積み上げてきたもの</div>
+            <div class="myway-card-ttl">歩みと、確かな実績</div>
+          </div>
+        </div>
+        <div class="myway-card-bd">
+          <div id="myway-text-1" class="myway-txt">環科太郎さんは入学時から<span class="mw-kw">有明海の環境保全</span>という明確な志を持ち、その思いを軸に大学生活を積み重ねてきました。学業面では累積GPA <span class="mw-num">2.66</span>（コース平均2.42を上回る）、修得単位 <span class="mw-num">124単位</span>と卒業要件を充足しており、<span class="mw-num">6</span>期連続でGPAが向上するという着実な成長曲線を描いています。コース内順位は上位<span class="mw-num">25%</span>に位置しており、学業への継続的な取り組みが数字として明確に表れています。<span class="mw-sep"></span>課外活動においても、1年次から<span class="mw-kw">テニスサークル</span>に所属し車いすテニス大会で<span class="mw-kw">ボランティア</span>を経験、3年次にはケニア・ジョモケニヤッタ農工大学主催の<span class="mw-kw">ロボットコンテスト</span>で<span class="mw-kw">優秀賞</span>を獲得するなど、国内外の実践的な場で幅広い経験を積んできました。資格面では<span class="mw-kw">ITパスポート</span>（2025年6月）、TOEICスコアは550点台から<span class="mw-num">785</span>点台（B2レベル）へと段階的に向上しており、語学・情報の両面で計画的に力を伸ばしてきた姿勢が読み取れます。インターンシップには2年次・3年次と連続して参加し、合計<span class="mw-num">12</span>日間にわたって<span class="mw-kw">北海道庁</span>での実務を体験しています。授業の成果物としても「生成系AIに関する考察レポート」「学外インターンシップ報告書」など複数のアウトプットを残しており、学びを形にする習慣が着実に身についています。</div>
+        </div>
+        <div class="myway-card-ft">
+          <button class="myway-btn-copy" onclick="mywayClipboard('myway-text-1')">コピー</button>
+        </div>
+      </div>
+
+      <!-- カード2: 強み -->
+      <div class="myway-card">
+        <div class="myway-card-hd" style="border-left:4px solid #BA7517;">
+          <div class="myway-card-ic" style="background:#fff4e0;">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polygon points="8.5,1.5 10.5,6.5 16,6.5 11.5,10 13.5,16 8.5,12.5 3.5,16 5.5,10 1,6.5 6.5,6.5" stroke="#854F0B" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <div>
+            <div class="myway-card-lbl" style="color:#854F0B;">データが語る、あなたの強み</div>
+            <div class="myway-card-ttl">気づいていないかもしれない、あなたらしさ</div>
+          </div>
+        </div>
+        <div class="myway-card-bd">
+          <div id="myway-text-2" class="myway-txt">成長の記録（DP軸）を通じて一貫して高い評価を示しているのが<span class="mw-kw">協働性</span>と<span class="mw-kw">責任感</span>です。「他の人と協力して物事に取り組む」「自らの役割に責任を持って取り組む」は入学時から最高評価（★<span class="mw-num">4</span>）を維持し続けており、これは後天的に鍛えたものではなく、もともとの資質として備わっている特性といえます。自己評価ルーブリックでは<span class="mw-kw">主体性</span>が学期ごとに着実に上昇し、3年次後期にレベル<span class="mw-num">4</span>（卒業要件の目安）に到達しており、大学生活を通じた顕著な成長が数字に表れています。<span class="mw-sep"></span>定性データからも重要な特徴が浮かびます。入学時の気持ちとして「大学で学ぶことが楽しみだ」「長崎大学に入学できて満足している」にいずれも「あてはまる」と回答しており、強い学習動機で大学生活をスタートしたことがわかります。学生生活の満足度（Q1）・学習意欲（Q11）はいずれも1年次から4年次にかけて右肩上がりで推移しており、環境への適応力と前向きさが一貫して維持されています。受講ふり返りでは「主体的学習」「<span class="mw-kw">協働性</span>」の選択率が学部平均を継続的に上回っており、授業の中でも自分の強みを自然に発揮できていることが確認できます。自分では当たり前だと感じているかもしれませんが、この一貫性こそが最大の強みです。</div>
+        </div>
+        <div class="myway-card-ft">
+          <button class="myway-btn-copy" onclick="mywayClipboard('myway-text-2')">コピー</button>
+        </div>
+      </div>
+
+      <!-- カード3: 未来志向 -->
+      <div class="myway-card">
+        <div class="myway-card-hd" style="border-left:4px solid #534AB7;">
+          <div class="myway-card-ic" style="background:#f0effe;">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M8.5 2v13M4 6l4.5-4 4.5 4" stroke="#3C3489" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="myway-card-lbl" style="color:#3C3489;">あなたの未来志向</div>
+            <div class="myway-card-ttl">志の一貫性と、これからのストーリー</div>
+          </div>
+        </div>
+        <div class="myway-card-bd">
+          <div id="myway-text-3" class="myway-txt">入学時から現在まで、<span class="mw-kw">公務員（土木職）として長崎市の都市計画に携わる</span>という志望が一度もぶれていません。これは決して珍しいことではありませんが、その志望が入学動機（有明海の環境保全）と直結しており、卒業研究テーマ「<span class="mw-kw">有明海</span>の流動特性と水質変化に関する現地観測」にも一貫してつながっている点が、このストーリーに強い説得力をもたらしています。<span class="mw-sep"></span>将来の見通しについても、1年次「見通しはあるが行動に結びついていない」→2年次「少しずつ行動し始めた」→3年次「具体的に行動している」と着実に前進しており、絵に描いた餅ではなく実際に動いてきた証跡が記録として残っています。<span class="mw-kw">北海道庁</span>でのインターンシップ（合計<span class="mw-num">12</span>日間）を経て「公務員の仕事に確信が持てた」と記録していることは、体験を通じて志望を深化させた重要な転換点です。メンターからの助言も目標振り返りの中に蓄積されており、他者の視点からも認められた成長の跡が記録されています。就職活動においてこの「入学動機→学びの深化→インターン体験→卒業研究」という一本のストーリーを語ることは、あなた固有の強みになります。</div>
+        </div>
+        <div class="myway-card-ft">
+          <button class="myway-btn-copy" onclick="mywayClipboard('myway-text-3')">コピー</button>
+        </div>
+      </div>
+
+      <!-- カード4: 自己PR -->
+      <div class="myway-card">
+        <div class="myway-card-hd" style="border-left:4px solid #0d4f9c;">
+          <div class="myway-card-ic" style="background:#e8f0fe;">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><rect x="2" y="3" width="13" height="11" rx="2" stroke="#0d4f9c" stroke-width="1.4"/><path d="M5 7h7M5 10h4" stroke="#0d4f9c" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="myway-card-lbl" style="color:#0d4f9c;">就活への一言 — 自己PR素材</div>
+            <div class="myway-card-ttl">エントリーシートや面接のヒントとして</div>
+          </div>
+        </div>
+        <div class="myway-card-bd">
+          <div class="myway-pr-wrap">
+            <div class="myway-pr-lbl">AI生成 自己PR素材（自分の言葉で編集してご利用ください）</div>
+            <div id="myway-text-4" class="myway-pr-txt">私が大学生活で一貫して大切にしてきたのは、「地元・長崎の自然環境を守る」という入学時からの志です。公務員（土木職）を志望し、その実現に向けてGPAの継続的な向上、北海道庁でのインターンシップ（合計12日間）、資格取得（ITパスポート・TOEIC B2）と複数の軸で着実に準備を重ねてきました。ケニアでのロボットコンテスト優秀賞や車いすテニス大会でのボランティア活動を通じて、多様な人と協力しながら目標に向かう力も身につけました。入学時の志と卒業研究テーマが一本のストーリーとして結びついている点が、私の強みだと考えています。</div>
+            <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+              <button class="myway-pr-copy" onclick="mywayClipboard('myway-text-4')">全文コピー</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="myway-note">※ このレポートはポートフォリオに蓄積されたデータをもとにAIが生成したものです。内容はご自身で確認のうえご活用ください。<br>データは学外に送信されません（使用モデル：管理者設定による）</p>
+  </div>
+
+  <!-- ローディング表示（非表示） -->
+  <div id="myway-loading" style="display:none;text-align:center;padding:48px 20px;">
+    <div class="myway-spinner"></div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-top:16px;line-height:1.8;" id="myway-loading-msg">ポートフォリオのデータを読み込んでいます...</div>
+  </div>
+
 </div>
 
 </main>
@@ -1159,6 +1344,7 @@ function initCharts(tab){
   if(tab==='future') initFuture();
   if(tab==='rubric'){initRubric();}
   if(tab==='numbers'){buildQ6Table();}
+  if(tab==='myway'){/* 生成はボタン押下時のみ */}
 }
 
 function initAbility(){
@@ -1498,6 +1684,243 @@ function initRubric() {
 
 
 
+
+// ===== MYWAY TAB =====
+function mywayBuildContext(){
+  return `
+【学生情報】
+氏名：テスト 環科太郎　所属：長崎大学 環境科学部 4年生　入学：2024年4月
+
+【学業データ】
+累積GPA：2.66（コース平均2.42を上回る）　累積修得単位：124単位（卒業要件充足）
+GPA推移：6期連続向上　コース内順位：上位25%
+
+【高校時代の行動（Q5）】
+授業中の質問・主張：あまりしなかった　論文・記事を読む：まったくしなかった
+ネット情報確認：ときどきした　自主学習：ときどきした　挑戦：ときどきした
+
+【入学時の行動特性（Q8）】
+自ら行動を決める・責任感・協働：いつも行う
+情報収集・論理的思考：少し行う　地域・国際関心：めったに行わない
+
+【入学時の気持ち（Q9新入生）】
+「大学で学ぶことが楽しみだ」「入学できて満足」→あてはまる
+「大学でうまくやっていく自信がある」→どちらかといえばあてはまる
+
+【学生生活満足度推移（Q1・Q10・Q11）】
+学生生活充実度・専門教育満足度・学習意欲：いずれも1年次から4年次にかけて右肩上がり
+就職・キャリア支援への満足度：最も大きく向上（1年次1.8→4年次3.0）
+
+【成長の記録 DP軸（Q9A〜P 学部生）】
+協働性・責任感：入学時から一貫して高評価（★4）
+主体性：年次を追うごとに向上　国際・地域関心：やや低め（伸び代あり）
+
+【自己評価ルーブリック（9観点・5点満点）】
+主体性：Lv2→4（3年後期）　協働性：Lv2→4　汎用的能力（情報リテラシー）：Lv1→3
+倫理観：Lv2→4　多様性の理解：Lv1→3
+
+【受講ふり返り】
+「主体的学習」「協働性」の選択率が学部平均を継続的に上回る
+
+【渡航・インターンシップ】
+入学前渡航：10日以上1ヶ月未満（旅行・語学研修）
+2年次：北海道庁インターンシップ（3日間）　3年次：同（合計12日間、最長9日）
+「公務員の仕事に確信が持てた」と記録
+
+【資格・検定】
+ITパスポート（2025年6月・合格）　TOEIC：550点台→785点台（B2レベル）
+普通自動車免許第二種（2026年10月）
+
+【将来の職業志望（Q19）推移】
+1〜4年次一貫：公務員（土木職）として長崎市の都市計画に携わりたい
+
+【卒業後にしたいこと（Q18）・就活状況（Q15）】
+1年次：語学力向上・インターン参加・ボランティア
+2年次：公務員試験勉強・インターン参加済み
+3年次：公務員試験合格・卒業論文完成　試験勉強を本格化
+
+【将来の見通し（Q22）】
+1年次→「見通しあるが行動に結びつかない」
+2年次→「少しずつ行動し始めた」
+3年次→「具体的に行動している」
+
+【目標振り返り・メンターコメント】
+1年次：必修不合格の経験→「毎回出席と復習で必ず取得できる」（メンター）
+2年次：「優以上1/3を目標に復習強化」→「計画的に予習復習に取り組んで」（メンター）
+
+【将来の夢・記録】
+3年前期：北海道庁インターン希望・応募相談
+3年後期：公務員（土木総合職）として長崎市都市計画に携わりたい
+4年前期：卒業研究「有明海の流動特性と水質変化に関する現地観測」開始
+
+【その他活動】
+2年前期：テニスサークル所属・車いすテニス大会ボランティア
+3年前期：ケニア・ジョモケニヤッタ農工大学主催ロボットコンテスト優秀賞
+4年後期：土木の日「テクノパワー土木おもしろ体験隊」で小学生に水理実験を指導
+
+【入学動機（一言）】
+「環境問題に関心があり、地元長崎の自然環境を守る仕事に就きたい。特に有明海の環境保全に携わりたいという気持ちが強く、環境科学部を選んだ。」
+
+【成果物】
+情報基礎レポート（生成系AI考察）・初年次セミナーレポート
+学外インターンシップ報告レポート・環境工学実習データ
+`.trim();
+}
+
+const MYWAY_PROMPTS = {
+  1: (ctx) => `あなたは大学生のポートフォリオを分析する教育支援AIです。
+以下の学生データを読み解き、「あなたが積み上げてきたもの（歩みと実績）」セクションを日本語で記述してください。
+
+【要件】
+- 定量データ（GPA・単位・資格・ルーブリックスコア変化）と定性データ（目標記録・体験・気持ちの変化）を両方織り交ぜること
+- 学生が読んで「自分のことが書かれている」と感じられるような具体的な記述にすること
+- 肯定的かつ正確に。過大評価せず、データに基づいて記述すること
+- 400〜500字程度
+- 体言止めは使わず、自然な文章で
+
+【学生データ】
+${ctx}`,
+
+  2: (ctx) => `あなたは大学生のポートフォリオを分析する教育支援AIです。
+以下の学生データを読み解き、「データが語る、あなたの強み」セクションを日本語で記述してください。
+
+【要件】
+- Q8・Q9DP軸・ルーブリック・受講ふり返りなど複数の角度からデータを読み取り、強みを言語化すること
+- 「気づいていなかった強み」を指摘するような視点を含めること
+- 数字を引用しながら根拠を示すこと
+- 400〜500字程度
+- 体言止めは使わず、自然な文章で
+
+【学生データ】
+${ctx}`,
+
+  3: (ctx) => `あなたは大学生のポートフォリオを分析する教育支援AIです。
+以下の学生データを読み解き、「あなたの未来志向（志の一貫性とこれからのストーリー）」セクションを日本語で記述してください。
+
+【要件】
+- Q19・Q18・Q22・目標記録・将来の夢記録を中心に読み解くこと
+- 志望の変化・深化のストーリーを時系列で示すこと
+- 入学動機と卒業研究テーマの接続性に言及すること
+- 就職活動でこのストーリーを語ることの強みを伝えること
+- 400〜500字程度
+- 体言止めは使わず、自然な文章で
+
+【学生データ】
+${ctx}`,
+
+  4: (ctx) => `あなたは大学生のポートフォリオを分析する教育支援AIです。
+以下の学生データをもとに、エントリーシートや面接で活用できる「自己PR素材」を日本語で記述してください。
+
+【要件】
+- 全データを総合して、この学生らしさが伝わる自己PRを作成すること
+- 具体的なエピソード（インターン・コンテスト・ボランティア等）を盛り込むこと
+- 強み・志望・行動の3要素を含めること
+- 250〜300字程度（ESの枠に収まる量）
+- 「私は〜」で始めること
+
+【学生データ】
+${ctx}`,
+};
+
+let mywayGenerated = false;
+
+async function callMywayAPI(prompt) {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await response.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+function mywayRenderText(elId, text, isPr) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  // キーワードをハイライト
+  const keywords = ['協働','主体性','責任感','有明海','長崎','公務員','土木','インターン','ルーブリック','GPA','資格','TOEIC','ITパスポート','ロボットコンテスト','優秀賞','ボランティア','卒業研究','都市計画'];
+  let html = text.replace(/\n/g, '<br>');
+  if (!isPr) {
+    keywords.forEach(kw => {
+      html = html.replace(new RegExp(kw, 'g'), `<span class="mw-kw">${kw}</span>`);
+    });
+    // 数字＋単位をハイライト
+    html = html.replace(/(\d+\.?\d*)(点|単位|年次|回|日間|字|%)/g, '<span class="mw-num">$1$2</span>');
+  }
+  el.innerHTML = html;
+}
+
+async function initMyway() {
+  const loading = document.getElementById('myway-loading');
+  const result = document.getElementById('myway-result');
+  const msgs = [
+    'ポートフォリオのデータを読み込んでいます...',
+    'GPA・単位・ルーブリックを分析中...',
+    '活動記録・資格情報を読み解いています...',
+    '将来志望・目標記録を確認しています...',
+    'AIが分析レポートを生成しています...',
+  ];
+  loading.style.display = 'block';
+  result.style.display = 'none';
+  let mi = 0;
+  const msgEl = document.getElementById('myway-loading-msg');
+  const ticker = setInterval(() => { msgEl.textContent = msgs[Math.min(++mi, msgs.length-1)]; }, 3000);
+
+  try {
+    const ctx = mywayBuildContext();
+    const [t1, t2, t3, t4] = await Promise.all([
+      callMywayAPI(MYWAY_PROMPTS[1](ctx)),
+      callMywayAPI(MYWAY_PROMPTS[2](ctx)),
+      callMywayAPI(MYWAY_PROMPTS[3](ctx)),
+      callMywayAPI(MYWAY_PROMPTS[4](ctx)),
+    ]);
+    clearInterval(ticker);
+    mywayRenderText('myway-text-1', t1, false);
+    mywayRenderText('myway-text-2', t2, false);
+    mywayRenderText('myway-text-3', t3, false);
+    mywayRenderText('myway-text-4', t4, true);
+    const now = new Date();
+    document.getElementById('myway-date').textContent =
+      `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 生成`;
+    loading.style.display = 'none';
+    result.style.display = 'block';
+    mywayGenerated = true;
+  } catch(e) {
+    clearInterval(ticker);
+    loading.style.display = 'none';
+    msgEl.textContent = '';
+    alert('生成中にエラーが発生しました。しばらくしてから再度お試しください。');
+  }
+}
+
+async function mywayRegen(section) {
+  const elId = `myway-text-${section}`;
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const isPr = section === 4;
+  el.innerHTML = '<span style="color:var(--text-tertiary);font-size:13px;">再生成中...</span>';
+  try {
+    const ctx = mywayBuildContext();
+    const text = await callMywayAPI(MYWAY_PROMPTS[section](ctx));
+    mywayRenderText(elId, text, isPr);
+  } catch(e) {
+    el.innerHTML = '<span style="color:#c0431f;font-size:13px;">エラーが発生しました。再度お試しください。</span>';
+  }
+}
+
+function mywayClipboard(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = el.closest('.myway-card').querySelector(`[onclick="mywayClipboard('${elId}')"]`);
+    if (btn) { btn.textContent = 'コピー完了！'; setTimeout(() => btn.textContent = 'コピー', 1500); }
+  });
+}
 
 // ===== Q6 TIME TABLE in 数字で見る私 =====
 function buildQ6Table() {
